@@ -9,16 +9,17 @@ public class AccountTest {
         TransactionsFake transactionsFake = new TransactionsFake();
         Account account = new Account(transactionsFake);
 
-        account.makeDeposit(0);
+        account.makeDeposit(new Amount(0));
 
         assertThat(transactionsFake.balance).isEqualTo(0);
     }
 
 
+
     class TransactionsFake implements Transactions{
         public int balance;
 
-        public void add(int ammount) {
+        public void add(int amount) {
             balance = 0;
         }
     }
