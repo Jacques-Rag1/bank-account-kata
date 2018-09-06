@@ -1,0 +1,4 @@
+enum  Operations {
+    DEPOSIT,
+    WITHDRAWAL;
+}

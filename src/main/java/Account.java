@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 class Account {
 
 
@@ -13,5 +15,10 @@ class Account {
 
     public void makeWithdrawal(Amount amount) {
         transactions.remove(amount);
+    }
+
+    public ArrayList<Operations> getOperationsHistory() {
+
+        return transactions.getOperationsHistory();
     }
 }
