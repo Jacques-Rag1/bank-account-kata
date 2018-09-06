@@ -4,4 +4,5 @@ class Amount {
     public Amount(int amountValue) {
         this.value = amountValue;
     }
+
 }

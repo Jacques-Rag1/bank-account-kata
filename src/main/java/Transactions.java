@@ -3,9 +3,9 @@ import java.util.ArrayList;
 public interface Transactions {
 
 
-    void add(Amount amount);
+    void add(OperationStatement operationStatement);
 
-    void remove(Amount amount);
+    void remove(OperationStatement operationStatement);
 
-    ArrayList<Operations> getOperationsHistory();
+    ArrayList<OperationStatement> getOperationsHistory();
 }

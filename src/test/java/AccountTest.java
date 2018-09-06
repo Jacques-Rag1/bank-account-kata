@@ -1,7 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,13 +14,15 @@ public class AccountTest {
 
     TransactionsFake transactionsFake;
     OperationsHistoryFake operationsHistoryFake;
+    OperationDateFake dateFake;
     Account account;
 
     @Before
     public void varInit(){
         transactionsFake = new TransactionsFake();
         operationsHistoryFake = new OperationsHistoryFake();
-        account = new Account(transactionsFake, operationsHistoryFake);
+        dateFake = new OperationDateFake();
+        account = new Account(transactionsFake, operationsHistoryFake, dateFake);
     }
     @Test
     public void make_deposit_should_delegate_to_transaction(){
@@ -69,34 +71,70 @@ public class AccountTest {
         assertThat(operationsHistoryFake.operationsHistory).isEqualTo(operations);
     }
 
+    @Test
+    public void history_with_date_and_amount() {
+        transactionsFake.balance = 0;
+        ArrayList<OperationStatement> operationStatements = new ArrayList<>();
+        operationStatements.add(new OperationStatement(Operations.DEPOSIT, AMOUNT_100, dateFake));
+        operationStatements.add(new OperationStatement(Operations.DEPOSIT, AMOUNT_100, dateFake));
+        operationStatements.add(new OperationStatement(Operations.WITHDRAWAL, AMOUNT_100, dateFake));
+
+        account.makeDeposit(AMOUNT_100);
+        account.makeDeposit(AMOUNT_100);
+        account.makeWithdrawal(AMOUNT_100);
+        account.getOperationsHistory();
+
+        assertThat(operationsHistoryFake.history).isEqualTo(operationStatements);
+        assertThat(operationsHistoryFake.history).isEqualTo(operationStatements);
+
+    }
 
     class TransactionsFake implements Transactions{
         public int balance = 0;
 
         public List<Operations> operationsHistory = new ArrayList<>();
+        public  List<OperationStatement> operationStatements = new ArrayList<>();
 
-        public void add(Amount amount) {
-            balance += amount.value;
-            operationsHistory.add(Operations.DEPOSIT);
-        }
-
-        public void remove(Amount amount) {
-            balance -= amount.value;
-            operationsHistory.add(Operations.WITHDRAWAL);
+        public TransactionsFake() {
         }
 
         @Override
-        public ArrayList<Operations> getOperationsHistory() {
-            return (ArrayList<Operations>) operationsHistory;
+        public void add(OperationStatement operationStatement) {
+            balance += operationStatement.getAmount().value;
+            operationsHistory.add(Operations.DEPOSIT);
+
+            operationStatements.add(operationStatement);
+        }
+        @Override
+        public void remove(OperationStatement operationStatement) {
+            balance -= operationStatement.getAmount().value;
+            operationsHistory.add(Operations.WITHDRAWAL);
+
+            operationStatements.add(operationStatement);
+        }
+
+        @Override
+        public ArrayList<OperationStatement> getOperationsHistory() {
+            return (ArrayList<OperationStatement>) operationStatements;
         }
     }
 
     class OperationsHistoryFake implements OperationsHistory{
         public ArrayList<Operations> operationsHistory;
+        public ArrayList<OperationStatement> history;
 
         @Override
         public void setPrinting(Transactions transactions) {
-           operationsHistory = transactions.getOperationsHistory();
+            operationsHistory = (ArrayList<Operations>) transactionsFake.operationsHistory;
+            history = transactions.getOperationsHistory();
+        }
+    }
+
+    class OperationDateFake implements OperationDate{
+
+        @Override
+        public LocalDate getDate() {
+            return LocalDate.of(2018, 9, 06);
         }
     }
 }
