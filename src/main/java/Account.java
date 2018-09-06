@@ -10,4 +10,8 @@ class Account {
     public void makeDeposit(Amount amount) {
         transactions.add(amount);
     }
+
+    public void makeWithdrawal(Amount amount) {
+        transactions.remove(amount);
+    }
 }

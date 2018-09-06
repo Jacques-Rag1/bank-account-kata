@@ -35,15 +35,24 @@ public class AccountTest {
         assertThat(transactionsFake.balance).isEqualTo(200);
     }
 
+    @Test
+    public void makeWithdrawal_should_send_request_to_transactions_to_remove() {
+        transactionsFake.balance = 250;
 
+        account.makeWithdrawal(new Amount(50));
 
-
+        assertThat(transactionsFake.balance).isEqualTo(200);
+    }
 
     class TransactionsFake implements Transactions{
         public int balance = 0;
 
         public void add(Amount amount) {
             balance += amount.value;
+        }
+
+        public void remove(Amount amount) {
+            balance -= amount.value;
         }
     }
 }
