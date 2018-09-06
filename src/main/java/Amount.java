@@ -5,4 +5,10 @@ class Amount {
         this.value = amountValue;
     }
 
+    @Override
+    public String toString() {
+        return "Amount{" +
+            "value=" + value +
+            '}';
+    }
 }

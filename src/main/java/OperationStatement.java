@@ -16,6 +16,15 @@ class OperationStatement {
     }
 
     @Override
+    public String toString() {
+        return "OperationStatement{" +
+            "operation=" + operation +
+            ", amount=" + amount +
+            ", operationDate=" + operationDate +
+            '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

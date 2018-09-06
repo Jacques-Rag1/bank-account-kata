@@ -94,6 +94,7 @@ public class AccountTest {
 
         public List<Operations> operationsHistory = new ArrayList<>();
         public  List<OperationStatement> operationStatements = new ArrayList<>();
+        public List<String> printingStatements = new ArrayList<>();
 
         public TransactionsFake() {
         }
@@ -104,6 +105,7 @@ public class AccountTest {
             operationsHistory.add(Operations.DEPOSIT);
 
             operationStatements.add(operationStatement);
+            printingStatements.add(operationStatement.toString() + "balance " + balance);
         }
         @Override
         public void remove(OperationStatement operationStatement) {
@@ -111,6 +113,7 @@ public class AccountTest {
             operationsHistory.add(Operations.WITHDRAWAL);
 
             operationStatements.add(operationStatement);
+            printingStatements.add(operationStatement.toString() + "balance " + balance);
         }
 
         @Override
@@ -127,6 +130,8 @@ public class AccountTest {
         public void setPrinting(Transactions transactions) {
             operationsHistory = (ArrayList<Operations>) transactionsFake.operationsHistory;
             history = transactions.getOperationsHistory();
+            transactionsFake.printingStatements.forEach(System.out::println);
+
         }
     }
 
@@ -135,6 +140,11 @@ public class AccountTest {
         @Override
         public LocalDate getDate() {
             return LocalDate.of(2018, 9, 06);
+        }
+
+        @Override
+        public String toString() {
+            return getDate().toString();
         }
     }
 }
