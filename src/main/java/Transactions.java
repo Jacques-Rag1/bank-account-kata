@@ -1,11 +1,11 @@
-import java.util.ArrayList;
-
 public interface Transactions {
 
 
-    void add(OperationStatement operationStatement);
+    OperationStatement add(Amount amount, OperationDate operationDate);
 
-    void remove(OperationStatement operationStatement);
+    OperationStatement remove(Amount amount, OperationDate operationDate);
 
-    ArrayList<OperationStatement> getOperationsHistory();
+    void addStatement(OperationStatement statement);
+
+    void getOperationsHistory();
 }

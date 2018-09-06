@@ -97,14 +97,11 @@ public class AccountTest {
 
     class OperationDateFake implements OperationDate{
 
-        @Override
-        public LocalDate getDate() {
-            return LocalDate.of(2018, 9, 06);
-        }
+        public LocalDate date = LocalDate.of(2018, 9, 06);
 
         @Override
         public String toString() {
-            return getDate().toString();
+            return date.toString();
         }
     }
 }

@@ -4,11 +4,13 @@ class OperationStatement {
     private Operations operation;
     private Amount amount;
     private OperationDate operationDate;
+    private Amount balance;
 
-    public OperationStatement(Operations operation, Amount amount, OperationDate operationDate) {
+    public OperationStatement(Operations operation, Amount amount, OperationDate operationDate, Amount balance) {
         this.operation = operation;
         this.amount = amount;
         this.operationDate = operationDate;
+        this.balance = balance;
     }
 
     public Operations getOperation() {
@@ -58,5 +60,13 @@ class OperationStatement {
 
     public void setOperationDate(OperationDate operationDate) {
         this.operationDate = operationDate;
+    }
+
+    public Amount getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Amount balance) {
+        this.balance = balance;
     }
 }
