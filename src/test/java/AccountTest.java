@@ -13,16 +13,14 @@ public class AccountTest {
     public static final Amount AMOUNT_50 = new Amount(50);
 
     TransactionsFake transactionsFake;
-    OperationsHistoryFake operationsHistoryFake;
     OperationDateFake dateFake;
     Account account;
 
     @Before
     public void varInit(){
         transactionsFake = new TransactionsFake();
-        operationsHistoryFake = new OperationsHistoryFake();
         dateFake = new OperationDateFake();
-        account = new Account(transactionsFake, operationsHistoryFake, dateFake);
+        account = new Account(transactionsFake, dateFake);
     }
     @Test
     public void make_deposit_should_delegate_to_transaction(){
@@ -58,81 +56,43 @@ public class AccountTest {
     @Test
     public void getOperationsHistory_should_return_a_list_of_all_operations() {
         transactionsFake.balance = 0;
-        ArrayList<Operations> operations = new ArrayList<>() ;
-        operations.add(Operations.DEPOSIT);
-        operations.add(Operations.DEPOSIT);
-        operations.add(Operations.WITHDRAWAL);
 
-        account.makeDeposit(AMOUNT_100);
-        account.makeDeposit(AMOUNT_50);
-        account.makeWithdrawal(AMOUNT_100);
-        account.getOperationsHistory();
 
-        assertThat(operationsHistoryFake.operationsHistory).isEqualTo(operations);
     }
 
     @Test
     public void history_with_date_and_amount() {
         transactionsFake.balance = 0;
-        ArrayList<OperationStatement> operationStatements = new ArrayList<>();
-        operationStatements.add(new OperationStatement(Operations.DEPOSIT, AMOUNT_100, dateFake));
-        operationStatements.add(new OperationStatement(Operations.DEPOSIT, AMOUNT_100, dateFake));
-        operationStatements.add(new OperationStatement(Operations.WITHDRAWAL, AMOUNT_100, dateFake));
 
-        account.makeDeposit(AMOUNT_100);
-        account.makeDeposit(AMOUNT_100);
-        account.makeWithdrawal(AMOUNT_100);
-        account.getOperationsHistory();
-
-        assertThat(operationsHistoryFake.history).isEqualTo(operationStatements);
-        assertThat(operationsHistoryFake.history).isEqualTo(operationStatements);
 
     }
 
     class TransactionsFake implements Transactions{
         public int balance = 0;
+        public List<OperationStatement> statements = new ArrayList<>();
 
-        public List<Operations> operationsHistory = new ArrayList<>();
-        public  List<OperationStatement> operationStatements = new ArrayList<>();
-        public List<String> printingStatements = new ArrayList<>();
 
-        public TransactionsFake() {
+        @Override
+        public OperationStatement add(Amount amount, OperationDate operationDate) {
+            balance += amount.value;
+            return new OperationStatement(Operations.DEPOSIT, amount, operationDate, new Amount(balance));
+        }
+        @Override
+        public OperationStatement remove(Amount amount, OperationDate operationDate) {
+            balance -= amount.value;
+            return new OperationStatement(Operations.WITHDRAWAL, amount, operationDate, new Amount(balance));
         }
 
         @Override
-        public void add(OperationStatement operationStatement) {
-            balance += operationStatement.getAmount().value;
-            operationsHistory.add(Operations.DEPOSIT);
-
-            operationStatements.add(operationStatement);
-            printingStatements.add(operationStatement.toString() + "balance " + balance);
-        }
-        @Override
-        public void remove(OperationStatement operationStatement) {
-            balance -= operationStatement.getAmount().value;
-            operationsHistory.add(Operations.WITHDRAWAL);
-
-            operationStatements.add(operationStatement);
-            printingStatements.add(operationStatement.toString() + "balance " + balance);
+        public void addStatement(OperationStatement statement) {
+            statements.add(statement);
         }
 
         @Override
-        public ArrayList<OperationStatement> getOperationsHistory() {
-            return (ArrayList<OperationStatement>) operationStatements;
+        public void getOperationsHistory() {
+            statements.forEach(System.out::println);
         }
-    }
 
-    class OperationsHistoryFake implements OperationsHistory{
-        public ArrayList<Operations> operationsHistory;
-        public ArrayList<OperationStatement> history;
-
-        @Override
-        public void setPrinting(Transactions transactions) {
-            operationsHistory = (ArrayList<Operations>) transactionsFake.operationsHistory;
-            history = transactions.getOperationsHistory();
-            transactionsFake.printingStatements.forEach(System.out::println);
-
-        }
     }
 
     class OperationDateFake implements OperationDate{
