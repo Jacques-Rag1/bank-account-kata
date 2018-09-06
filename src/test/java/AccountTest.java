@@ -13,14 +13,25 @@ public class AccountTest {
 
         assertThat(transactionsFake.balance).isEqualTo(0);
     }
+    @Test
+    public void make_deposit_has_to_run_with_value(){
+        TransactionsFake transactionsFake = new TransactionsFake();
+        Account account = new Account(transactionsFake);
+
+        account.makeDeposit(new Amount(100));
+
+        assertThat(transactionsFake.balance).isEqualTo(100);
+    }
+
+
 
 
 
     class TransactionsFake implements Transactions{
         public int balance;
 
-        public void add(int amount) {
-            balance = 0;
+        public void add(Amount amount) {
+            balance = amount.value;
         }
     }
 }

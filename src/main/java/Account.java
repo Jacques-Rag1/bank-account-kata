@@ -8,6 +8,6 @@ class Account {
     }
 
     public void makeDeposit(Amount amount) {
-        transactions.add(amount.value);
+        transactions.add(amount);
     }
 }
