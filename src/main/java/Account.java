@@ -1,13 +1,14 @@
-import java.util.ArrayList;
-
 class Account {
 
 
     private final Transactions transactions;
+    private final OperationsHistory operationsHistory;
 
-    public Account(Transactions transactions) {
+    public Account(Transactions transactions, OperationsHistory operationsHistory) {
         this.transactions = transactions;
+        this.operationsHistory = operationsHistory;
     }
+
 
     public void makeDeposit(Amount amount) {
         transactions.add(amount);
@@ -17,8 +18,7 @@ class Account {
         transactions.remove(amount);
     }
 
-    public ArrayList<Operations> getOperationsHistory() {
-
-        return transactions.getOperationsHistory();
+    public void getOperationsHistory() {
+        operationsHistory.setPrinting(transactions);
     }
 }

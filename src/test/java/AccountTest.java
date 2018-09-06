@@ -13,12 +13,14 @@ public class AccountTest {
     public static final Amount AMOUNT_50 = new Amount(50);
 
     TransactionsFake transactionsFake;
+    OperationsHistoryFake operationsHistoryFake;
     Account account;
 
     @Before
     public void varInit(){
         transactionsFake = new TransactionsFake();
-        account = new Account(transactionsFake);
+        operationsHistoryFake = new OperationsHistoryFake();
+        account = new Account(transactionsFake, operationsHistoryFake);
     }
     @Test
     public void make_deposit_should_delegate_to_transaction(){
@@ -34,7 +36,7 @@ public class AccountTest {
         assertThat(transactionsFake.balance).isEqualTo(100);
     }
     @Test
-    public void make_deposite_can_agregate_amount(){
+    public void make_deposit_can_aggregate_amount(){
 
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_100);
@@ -62,8 +64,9 @@ public class AccountTest {
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_50);
         account.makeWithdrawal(AMOUNT_100);
+        account.getOperationsHistory();
 
-        assertThat(account.getOperationsHistory()).isEqualTo(operations);
+        assertThat(operationsHistoryFake.operationsHistory).isEqualTo(operations);
     }
 
 
@@ -85,6 +88,15 @@ public class AccountTest {
         @Override
         public ArrayList<Operations> getOperationsHistory() {
             return (ArrayList<Operations>) operationsHistory;
+        }
+    }
+
+    class OperationsHistoryFake implements OperationsHistory{
+        public ArrayList<Operations> operationsHistory;
+
+        @Override
+        public void setPrinting(Transactions transactions) {
+           operationsHistory = transactions.getOperationsHistory();
         }
     }
 }
