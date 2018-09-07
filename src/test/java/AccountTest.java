@@ -10,29 +10,52 @@ public class AccountTest {
     @Test
     public void make_deposit_should_delegate_to_transaction(){
         final ArrayList<Amount> addAmounts = new ArrayList<>();
-        addAmounts.add(new Amount(0));
+        addAmounts.add(new Amount(100));
+        addAmounts.add(new Amount(50));
+        addAmounts.add(new Amount(200));
+
         TransactionsFake transactionsFake = new TransactionsFake(
             addAmounts);
         Account account = new Account(transactionsFake);
 
 
-        account.makeDeposit(new Amount(0));
+        account.makeDeposit(new Amount(100));
+        account.makeDeposit(new Amount(50));
+        account.makeDeposit(new Amount(200));
 
         transactionsFake.verifyAdd();
     }
 
+    @Test
+    public void make_withdrawal_should_delegate_to_transaction() {
+        ArrayList<Amount> removeAmounts = new ArrayList<>();
+        removeAmounts.add(new Amount(100));
+        removeAmounts.add(new Amount(50));
+        removeAmounts.add(new Amount(200));
+
+        TransactionsFake transactionsFake = new TransactionsFake(
+            removeAmounts);
+        Account account = new Account(transactionsFake);
+
+        account.makeWithdrawal(new Amount(100));
+        account.makeWithdrawal(new Amount(50));
+        account.makeWithdrawal(new Amount(200));
+
+        transactionsFake.verifyRemove();
+    }
 
     class TransactionsFake implements Transactions{
 
-        List<Amount> addAmountsExpected ;
+        List<Amount> AmountsExpected;
         List<Amount> addAmountsActual = new ArrayList<>();
+        List<Amount> removeAmountsActual = new ArrayList<>();
 
 
         public TransactionsFake(List<Amount> addAmounts) {
-            this.addAmountsExpected = addAmounts;
+            this.AmountsExpected = addAmounts;
         }
         public void verifyAdd(){
-            assertThat(this.addAmountsExpected).isEqualTo(this.addAmountsActual);
+            assertThat(this.AmountsExpected).isEqualTo(this.addAmountsActual);
         }
 
         @Override
@@ -40,5 +63,13 @@ public class AccountTest {
            addAmountsActual.add(amount);
         }
 
+        @Override
+        public void remove(Amount amount) {
+            removeAmountsActual.add(amount);
+        }
+
+        public void verifyRemove() {
+            assertThat(this.AmountsExpected).isEqualTo(this.removeAmountsActual);
+        }
     }
 }
