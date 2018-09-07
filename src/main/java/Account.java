@@ -8,7 +8,7 @@ class Account {
         this.transactions = transactions;
     }
 
-    public void makeDeposit(int ammount) {
-        transactions.add(ammount);
+    public void makeDeposit(Amount amount) {
+        transactions.add(amount);
     }
 }
