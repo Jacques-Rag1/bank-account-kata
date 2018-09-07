@@ -16,7 +16,8 @@ public class AccountTest {
 
         TransactionsFake transactionsFake = new TransactionsFake(
             addAmounts);
-        Account account = new Account(transactionsFake);
+        OperationsFake operationsFake = new OperationsFake();
+        Account account = new Account(transactionsFake, operationsFake);
 
 
         account.makeDeposit(new Amount(100));
@@ -35,13 +36,25 @@ public class AccountTest {
 
         TransactionsFake transactionsFake = new TransactionsFake(
             removeAmounts);
-        Account account = new Account(transactionsFake);
+
+        OperationsFake operationsFake = new OperationsFake();
+        Account account = new Account(transactionsFake, operationsFake);
 
         account.makeWithdrawal(new Amount(100));
         account.makeWithdrawal(new Amount(50));
         account.makeWithdrawal(new Amount(200));
 
         transactionsFake.verifyRemove();
+    }
+
+    @Test
+    public void foo() {
+        TransactionsFake transactionsFake = new TransactionsFake(
+            new ArrayList<Amount>());
+        OperationsFake operationsFake = new OperationsFake();
+        Account account = new Account(transactionsFake, operationsFake);
+
+        operationsFake.verifyCheck();
     }
 
     class TransactionsFake implements Transactions{
@@ -70,6 +83,14 @@ public class AccountTest {
 
         public void verifyRemove() {
             assertThat(this.AmountsExpected).isEqualTo(this.removeAmountsActual);
+        }
+    }
+    class OperationsFake implements Operations{
+
+
+
+        public void verifyCheck() {
+
         }
     }
 }
