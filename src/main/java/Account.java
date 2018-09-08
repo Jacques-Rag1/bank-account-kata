@@ -12,9 +12,11 @@ class Account {
 
     public void makeDeposit(Amount amount) {
         transactions.add(amount);
+        operations.addStatement("DEPOSIT", amount);
     }
 
     public void makeWithdrawal(Amount amount) {
         transactions.remove(amount);
     }
+
 }
