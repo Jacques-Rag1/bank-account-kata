@@ -57,8 +57,8 @@ public class AccountTest {
             new ArrayList<Amount>());
 
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement("DEPOSIT", AMOUNT_100));
-        statements.add(new OperationStatement("DEPOSIT", AMOUNT_50));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50));
 
         OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFake, operationsFake);
@@ -75,8 +75,8 @@ public class AccountTest {
                 new ArrayList<Amount>());
 
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement("WITHDRAWAL", AMOUNT_100));
-        statements.add(new OperationStatement("WITHDRAWAL", AMOUNT_50));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50));
 
         OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFake, operationsFake);
@@ -118,7 +118,6 @@ public class AccountTest {
     class OperationsFake implements Operations{
         List<OperationStatement> operationsExpected;
         List<OperationStatement> operationsActual = new ArrayList<>();
-        List<OperationStatement> withdrawalOperationsActual = new ArrayList<>();
 
         public OperationsFake() {
         }

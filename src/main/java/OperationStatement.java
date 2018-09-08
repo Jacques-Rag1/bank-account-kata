@@ -1,10 +1,10 @@
 import java.util.Objects;
 
 public class OperationStatement {
-    private String operationName;
+    private OperationsType operationName;
     private Amount amount;
 
-    public OperationStatement(String operationName, Amount amount) {
+    public OperationStatement(OperationsType operationName, Amount amount) {
         this.operationName = operationName;
         this.amount = amount;
     }
@@ -14,7 +14,7 @@ public class OperationStatement {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OperationStatement statement = (OperationStatement) o;
-        return Objects.equals(operationName, statement.operationName) &&
+        return operationName == statement.operationName &&
                 Objects.equals(amount, statement.amount);
     }
 
@@ -27,7 +27,7 @@ public class OperationStatement {
     @Override
     public String toString() {
         return "OperationStatement{" +
-                "operationName='" + operationName + '\'' +
+                "operationName=" + operationName +
                 ", amount=" + amount +
                 '}';
     }
