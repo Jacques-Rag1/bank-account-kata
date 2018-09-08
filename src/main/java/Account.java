@@ -3,11 +3,13 @@ class Account {
 
     private final Transactions transactions;
     private final Operations operations;
+    private final CurrentDate currentDate;
 
-    public Account(Transactions transactions, Operations operations) {
+    public Account(Transactions transactions, Operations operations, CurrentDate currentDate) {
 
         this.transactions = transactions;
         this.operations = operations;
+        this.currentDate = currentDate;
     }
 
     public void makeDeposit(Amount amount) {
@@ -27,7 +29,7 @@ class Account {
             balance = new Amount(transactions.remove(amount).value);
         }
 
-        operations.addStatement(new OperationStatement(operationsType, amount, balance));
+        operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDate));
     }
 
 }
