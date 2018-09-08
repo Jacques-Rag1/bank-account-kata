@@ -5,7 +5,7 @@ import java.util.Objects;
 public class Amount {
     int value;
 
-    Amount(int value) {
+    public Amount(int value) {
         this.value = value;
     }
 

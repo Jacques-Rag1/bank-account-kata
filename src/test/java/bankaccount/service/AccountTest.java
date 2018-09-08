@@ -1,9 +1,6 @@
 package bankaccount.service;
 
-import bankaccount.service.Account;
-import bankaccount.service.Amount;
-import bankaccount.service.OperationStatement;
-import bankaccount.util.CurrentDate;
+import bankaccount.util.CurrentDates;
 import bankaccount.util.Operations;
 import bankaccount.util.OperationsType;
 import bankaccount.util.Transactions;
@@ -30,14 +27,14 @@ public class AccountTest {
 
     TransactionsFake transactionsFakeGeneric;
     OperationsFake operationsFakeGeneric;
-    CurrentDateFake currentDateFakeUseless;
+    CurrentDatesFake currentDateFakeUseless;
 
     @Before
     public void initialise(){
         transactionsFakeGeneric = new TransactionsFake(
                 new ArrayList<>());
         transactionsFakeGeneric.noBalance = true;
-        currentDateFakeUseless = new CurrentDateFake(DAY_OF_OPERATIONS);
+        currentDateFakeUseless = new CurrentDatesFake(DAY_OF_OPERATIONS);
         currentDateFakeUseless.methodCall = 3;
         operationsFakeGeneric = new OperationsFake();
     }
@@ -128,9 +125,9 @@ public class AccountTest {
     }
     @Test
     public void when_operations_are_made_Account_should_insert_in_operations_with_date() {
-        CurrentDateFake currentDateFake = new CurrentDateFake(DAY_OF_OPERATIONS);
-        CurrentDateFake currentDateFakePlusOne = new CurrentDateFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
-        CurrentDateFake currentDateFakeMinusOne = new CurrentDateFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
+        CurrentDatesFake currentDateFake = new CurrentDatesFake(DAY_OF_OPERATIONS);
+        CurrentDatesFake currentDateFakePlusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
+        CurrentDatesFake currentDateFakeMinusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
 
         TransactionsFake transactionsFake = new TransactionsFake(
                 new ArrayList<>());
@@ -152,9 +149,9 @@ public class AccountTest {
     }
     @Test
     public void showOperationsHistory_should_delegate_to_Operations() {
-        CurrentDateFake currentDateFake = new CurrentDateFake(DAY_OF_OPERATIONS);
-        CurrentDateFake currentDateFakePlusOne = new CurrentDateFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
-        CurrentDateFake currentDateFakeMinusOne = new CurrentDateFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
+        CurrentDatesFake currentDateFake = new CurrentDatesFake(DAY_OF_OPERATIONS);
+        CurrentDatesFake currentDateFakePlusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
+        CurrentDatesFake currentDateFakeMinusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
 
         TransactionsFake transactionsFake = new TransactionsFake(
                 new ArrayList<>());
@@ -246,10 +243,10 @@ public class AccountTest {
         }
 
     }
-    class CurrentDateFake implements CurrentDate {
+    class CurrentDatesFake implements CurrentDates {
         LocalDate currentDate;
         int methodCall = 0;
-        public CurrentDateFake(LocalDate currentDate) {
+        public CurrentDatesFake(LocalDate currentDate) {
             this.currentDate = currentDate;
         }
 
@@ -264,7 +261,7 @@ public class AccountTest {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            CurrentDateFake that = (CurrentDateFake) o;
+            CurrentDatesFake that = (CurrentDatesFake) o;
             return methodCall == that.methodCall &&
                     Objects.equals(currentDate, that.currentDate);
         }
@@ -276,17 +273,17 @@ public class AccountTest {
         }
 
         @Override
-        public CurrentDate getCurrentDate() {
+        public CurrentDates getCurrentDate() {
             if (methodCall == 0){
                 methodCall++;
                 return this;
             }
             if (methodCall == 1){
                 methodCall++;
-                return new CurrentDateFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
+                return new CurrentDatesFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
             }
             if (methodCall == 2){
-                return new CurrentDateFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
+                return new CurrentDatesFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
             }
             return this;
         }

@@ -1,6 +1,6 @@
 package bankaccount.service;
 
-import bankaccount.util.CurrentDate;
+import bankaccount.util.CurrentDates;
 import bankaccount.util.OperationsType;
 
 import java.util.Objects;
@@ -9,13 +9,13 @@ public class OperationStatement {
     private final OperationsType operationName;
     private final Amount amount;
     private final Amount balance;
-    private final CurrentDate currentDate;
+    private final CurrentDates currentDates;
 
-    public OperationStatement(OperationsType operationName, Amount amount, Amount balance, CurrentDate currentDate) {
+    public OperationStatement(OperationsType operationName, Amount amount, Amount balance, CurrentDates currentDates) {
         this.operationName = operationName;
         this.amount = amount;
         this.balance = balance;
-        this.currentDate = currentDate;
+        this.currentDates = currentDates;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class OperationStatement {
                 "operationName=" + operationName +
                 ", amount=" + amount +
                 ", balance=" + balance +
-                ", currentDate=" + currentDate +
+                ", currentDate=" + currentDates +
                 '}';
     }
 
@@ -36,12 +36,12 @@ public class OperationStatement {
         return operationName == statement.operationName &&
                 Objects.equals(amount, statement.amount) &&
                 Objects.equals(balance, statement.balance) &&
-                Objects.equals(currentDate, statement.currentDate);
+                Objects.equals(currentDates, statement.currentDates);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(operationName, amount, balance, currentDate);
+        return Objects.hash(operationName, amount, balance, currentDates);
     }
 }

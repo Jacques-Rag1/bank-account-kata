@@ -1,21 +1,21 @@
 package bankaccount.service;
 
-import bankaccount.util.CurrentDate;
+import bankaccount.util.CurrentDates;
 import bankaccount.util.Operations;
 import bankaccount.util.OperationsType;
 import bankaccount.util.Transactions;
 
-class Account {
+public class Account {
 
 
     private final Transactions transactions;
     private final Operations operations;
-    private final CurrentDate currentDate;
+    private final CurrentDates currentDates;
 
-    public Account(Transactions transactions, Operations operations, CurrentDate currentDate) {
+    public Account(Transactions transactions, Operations operations, CurrentDates currentDates) {
         this.transactions = transactions;
         this.operations = operations;
-        this.currentDate = currentDate;
+        this.currentDates = currentDates;
     }
 
     public void makeDeposit(Amount amount) {
@@ -34,7 +34,7 @@ class Account {
         else{
             balance = new Amount(transactions.remove(amount).value);
         }
-        operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDate.getCurrentDate()));
+        operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDates.getCurrentDate()));
     }
 
     public void showOperationsHistory() {

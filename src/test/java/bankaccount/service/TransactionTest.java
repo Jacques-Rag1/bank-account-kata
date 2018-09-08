@@ -1,7 +1,5 @@
 package bankaccount.service;
 
-import bankaccount.service.Amount;
-import bankaccount.service.Transaction;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
