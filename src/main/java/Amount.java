@@ -20,4 +20,11 @@ class Amount {
 
         return Objects.hash(value);
     }
+
+    @Override
+    public String toString() {
+        return "Amount{" +
+                "value=" + value +
+                '}';
+    }
 }

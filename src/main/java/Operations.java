@@ -1,4 +1,4 @@
 public interface Operations {
 
-    void addStatement(String operation, Amount amount);
+    void addStatement(OperationStatement operationStatement);
 }

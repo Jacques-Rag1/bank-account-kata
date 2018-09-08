@@ -1,9 +1,7 @@
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,11 +55,12 @@ public class AccountTest {
     public void when_a_deposit_is_made_Account_should_insert_in_operations() {
         TransactionsFake transactionsFake = new TransactionsFake(
             new ArrayList<Amount>());
-        Map<String, Amount> depositsOperations = new HashMap<>();
-        depositsOperations.put("DEPOSIT", AMOUNT_100);
-        depositsOperations.put("DEPOSIT", AMOUNT_50);
 
-        OperationsFake operationsFake = new OperationsFake(depositsOperations);
+        List<OperationStatement> statements = new ArrayList<>();
+        statements.add(new OperationStatement("DEPOSIT", AMOUNT_100));
+        statements.add(new OperationStatement("DEPOSIT", AMOUNT_50));
+
+        OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFake, operationsFake);
 
         account.makeDeposit(AMOUNT_100);
@@ -70,19 +69,36 @@ public class AccountTest {
         operationsFake.verifyCheck();
     }
 
+    @Test
+    public void when_a_withdrawal_is_made_Account_should_insert_in_operations() {
+        TransactionsFake transactionsFake = new TransactionsFake(
+                new ArrayList<Amount>());
+
+        List<OperationStatement> statements = new ArrayList<>();
+        statements.add(new OperationStatement("WITHDRAWAL", AMOUNT_100));
+        statements.add(new OperationStatement("WITHDRAWAL", AMOUNT_50));
+
+        OperationsFake operationsFake = new OperationsFake(statements);
+        Account account = new Account(transactionsFake, operationsFake);
+
+        account.makeWithdrawal(AMOUNT_100);
+        account.makeWithdrawal(AMOUNT_50);
+
+        operationsFake.verifyCheck();
+    }
 
     class TransactionsFake implements Transactions{
 
-        List<Amount> AmountsExpected;
+        List<Amount> amountsExpected;
         List<Amount> addAmountsActual = new ArrayList<>();
         List<Amount> removeAmountsActual = new ArrayList<>();
 
 
         public TransactionsFake(List<Amount> addAmounts) {
-            this.AmountsExpected = addAmounts;
+            this.amountsExpected = addAmounts;
         }
         public void verifyAdd(){
-            assertThat(this.addAmountsActual).isEqualTo(this.AmountsExpected);
+            assertThat(this.addAmountsActual).isEqualTo(this.amountsExpected);
         }
 
         @Override
@@ -96,27 +112,28 @@ public class AccountTest {
         }
 
         public void verifyRemove() {
-            assertThat(this.removeAmountsActual).isEqualTo(this.AmountsExpected);
+            assertThat(this.removeAmountsActual).isEqualTo(this.amountsExpected);
         }
     }
     class OperationsFake implements Operations{
-        Map<String, Amount> depositsOperationsExpected;
-        Map<String, Amount> depositsOperationsActual = new HashMap<>();
+        List<OperationStatement> operationsExpected;
+        List<OperationStatement> operationsActual = new ArrayList<>();
+        List<OperationStatement> withdrawalOperationsActual = new ArrayList<>();
 
         public OperationsFake() {
         }
 
-        public OperationsFake(Map<String, Amount> depositsOperationsExpected) {
-            this.depositsOperationsExpected = depositsOperationsExpected;
+        public OperationsFake(List<OperationStatement> operationsExpected) {
+            this.operationsExpected = operationsExpected;
         }
 
         public void verifyCheck() {
-            assertThat(this.depositsOperationsActual).isEqualTo(this.depositsOperationsExpected);
+            assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
+        }
+        @Override
+        public void addStatement(OperationStatement operationStatement) {
+            this.operationsActual.add(operationStatement);
         }
 
-        @Override
-        public void addStatement(String operation, Amount amount) {
-            this.depositsOperationsActual.put(operation, amount);
-        }
     }
 }

@@ -12,11 +12,12 @@ class Account {
 
     public void makeDeposit(Amount amount) {
         transactions.add(amount);
-        operations.addStatement("DEPOSIT", amount);
+        operations.addStatement(new OperationStatement("DEPOSIT", amount));
     }
 
     public void makeWithdrawal(Amount amount) {
         transactions.remove(amount);
+        operations.addStatement(new OperationStatement("WITHDRAWAL", amount));
     }
 
 }
