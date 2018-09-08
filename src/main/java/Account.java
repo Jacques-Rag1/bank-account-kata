@@ -29,7 +29,7 @@ class Account {
             balance = new Amount(transactions.remove(amount).value);
         }
 
-        operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDate));
+        operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDate.getCurrentDate()));
     }
 
 }

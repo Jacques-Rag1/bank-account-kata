@@ -3,6 +3,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -14,6 +15,8 @@ public class AccountTest {
     public static final Amount BALANCE_100 = new Amount(100);
     public static final Amount BALANCE_150 = new Amount(150);
     public static final LocalDate DAY_OF_OPERATIONS = LocalDate.of(2018, 9, 8);
+    public static final LocalDate DAY_OF_OPERATIONS_PLUS_A_DAY = LocalDate.of(2018, 9, 8).plusDays(1);
+    public static final LocalDate DAY_OF_OPERATIONS_MINUS_A_DAY = LocalDate.of(2018, 9, 8).minusDays(1);
 
     @Test
     public void make_deposit_should_delegate_to_transaction(){
@@ -112,13 +115,16 @@ public class AccountTest {
     @Test
     public void when_operations_are_made_Account_should_insert_in_operations_with_date() {
         CurrentDateFake currentDateFake = new CurrentDateFake(DAY_OF_OPERATIONS);
+        CurrentDateFake currentDateFakePlusOne = new CurrentDateFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
+        CurrentDateFake currentDateFakeMinusOne = new CurrentDateFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
+
         TransactionsFake transactionsFake = new TransactionsFake(
                 new ArrayList<>());
 
         List<OperationStatement> statements = new ArrayList<>();
         statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, BALANCE_100, currentDateFake));
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, BALANCE_150, currentDateFake));
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, BALANCE_100, currentDateFake));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, BALANCE_150, currentDateFakePlusOne));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, BALANCE_100, currentDateFakeMinusOne));
 
         OperationsFake operationsFake = new OperationsFake(statements);
 
@@ -198,7 +204,7 @@ public class AccountTest {
     }
     class CurrentDateFake implements CurrentDate{
         LocalDate currentDate;
-
+        int methodCall = 0;
         public CurrentDateFake(LocalDate currentDate) {
             this.currentDate = currentDate;
         }
@@ -211,8 +217,34 @@ public class AccountTest {
         }
 
         @Override
-        public void getCurrentDate() {
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            CurrentDateFake that = (CurrentDateFake) o;
+            return methodCall == that.methodCall &&
+                    Objects.equals(currentDate, that.currentDate);
+        }
 
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(currentDate, methodCall);
+        }
+
+        @Override
+        public CurrentDate getCurrentDate() {
+            if (methodCall == 0){
+                methodCall++;
+                return this;
+            }
+            if (methodCall == 1){
+                methodCall++;
+                return new CurrentDateFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
+            }
+            if (methodCall == 2){
+                return new CurrentDateFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
+            }
+            return this;
         }
     }
 }

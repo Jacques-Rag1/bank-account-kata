@@ -1,4 +1,4 @@
 public interface CurrentDate {
 
-    void getCurrentDate();
+    CurrentDate getCurrentDate();
 }
