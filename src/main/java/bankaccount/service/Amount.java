@@ -5,8 +5,12 @@ import java.util.Objects;
 public class Amount {
     int value;
 
-    public Amount(int value) {
+    private Amount(int value) {
         this.value = value;
+    }
+
+    public static Amount of(int value) {
+        return new Amount(value);
     }
 
     @Override
@@ -25,9 +29,7 @@ public class Amount {
 
     @Override
     public String toString() {
-        return "Amount{" +
-                "value=" + value +
-                '}';
+        return String.valueOf(value);
     }
 
     public void plus(Amount amount) {

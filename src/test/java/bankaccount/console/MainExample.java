@@ -5,7 +5,7 @@ import bankaccount.service.*;
 public class MainExample {
 
     public static void main(String[] args){
-        Amount balance = new Amount(500);
+        Amount balance = Amount.of(500);
 
         CurrentDate currentDate = new CurrentDate();
         Operation operation = new Operation();
@@ -13,12 +13,12 @@ public class MainExample {
 
         Account myAccount = new Account(transaction, operation, currentDate);
 
-        myAccount.makeDeposit(new Amount(200));
-        myAccount.makeDeposit(new Amount(20));
-        myAccount.makeWithdrawal(new Amount(100));
-        myAccount.makeDeposit(new Amount(300));
-        myAccount.makeWithdrawal(new Amount(650));
-        myAccount.makeWithdrawal(new Amount(20));
+        myAccount.makeDeposit(Amount.of(200));
+        myAccount.makeDeposit(Amount.of(20));
+        myAccount.makeWithdrawal(Amount.of(100));
+        myAccount.makeDeposit(Amount.of(300));
+        myAccount.makeWithdrawal(Amount.of(650));
+        myAccount.makeWithdrawal(Amount.of(20));
 
         myAccount.showOperationsHistory();
 

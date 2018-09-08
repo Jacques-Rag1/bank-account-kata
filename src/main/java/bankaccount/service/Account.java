@@ -29,10 +29,10 @@ public class Account {
     private void makeOperation(OperationsType operationsType, Amount amount){
         Amount balance;
         if (operationsType.equals(OperationsType.DEPOSIT)){
-            balance = new Amount(transactions.add(amount).value);
+            balance = Amount.of(transactions.add(amount).value);
         }
         else{
-            balance = new Amount(transactions.remove(amount).value);
+            balance = Amount.of(transactions.remove(amount).value);
         }
         operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDates.getCurrentDate()));
     }

@@ -20,12 +20,12 @@ public class OperationStatement {
 
     @Override
     public String toString() {
-        return "OperationStatement{" +
-                "operationName=" + operationName +
-                ", amount=" + amount +
-                ", balance=" + balance +
-                ", currentDate=" + currentDates +
-                '}';
+        return "\n-----------------------------------------------------------\n" +
+                "Operation Name\t:\t" + operationName +
+                "\nAmount\t\t\t:\t" + amount +
+                "\nBalance\t\t\t:\t" + balance +
+                "\nDate\t\t\t:\t" + currentDates +
+                "\n-----------------------------------------------------------\n";
     }
 
     @Override

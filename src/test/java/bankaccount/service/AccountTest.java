@@ -16,11 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AccountTest {
 
-    public static final Amount AMOUNT_100 = new Amount(100);
-    public static final Amount AMOUNT_50 = new Amount(50);
-    public static final Amount AMOUNT_200 = new Amount(200);
-    public static final Amount BALANCE_100 = new Amount(100);
-    public static final Amount BALANCE_150 = new Amount(150);
+    public static final Amount AMOUNT_100 = Amount.of(100);
+    public static final Amount AMOUNT_50 = Amount.of(50);
+    public static final Amount AMOUNT_200 = Amount.of(200);
+    public static final Amount BALANCE_100 = Amount.of(100);
+    public static final Amount BALANCE_150 = Amount.of(150);
     public static final LocalDate DAY_OF_OPERATIONS = LocalDate.of(2018, 9, 8);
     public static final LocalDate DAY_OF_OPERATIONS_PLUS_A_DAY = LocalDate.of(2018, 9, 8).plusDays(1);
     public static final LocalDate DAY_OF_OPERATIONS_MINUS_A_DAY = LocalDate.of(2018, 9, 8).minusDays(1);
@@ -78,8 +78,8 @@ public class AccountTest {
     @Test
     public void when_a_deposit_is_made_Account_should_insert_in_operations() {
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, new Amount(0), currentDateFakeUseless));
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, new Amount(0), currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, Amount.of(0), currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, Amount.of(0), currentDateFakeUseless));
 
         OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFakeGeneric, operationsFake, currentDateFakeUseless);
@@ -93,8 +93,8 @@ public class AccountTest {
     @Test
     public void when_a_withdrawal_is_made_Account_should_insert_in_operations() {
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100, new Amount(0), currentDateFakeUseless));
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, new Amount(0), currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100, Amount.of(0), currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, Amount.of(0), currentDateFakeUseless));
 
         OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFakeGeneric, operationsFake, currentDateFakeUseless);
@@ -182,7 +182,7 @@ public class AccountTest {
         List<Amount> amountsExpected;
         List<Amount> addAmountsActual = new ArrayList<>();
         List<Amount> removeAmountsActual = new ArrayList<>();
-        Amount balanceActual = new Amount(0);
+        Amount balanceActual = Amount.of(0);
         boolean noBalance = false;
 
 
@@ -202,14 +202,14 @@ public class AccountTest {
         public Amount add(Amount amount) {
            addAmountsActual.add(amount);
            balanceActual.plus(amount);
-           return noBalance ? new Amount(0) : balanceActual;
+           return noBalance ? Amount.of(0) : balanceActual;
         }
 
         @Override
         public Amount remove(Amount amount) {
             removeAmountsActual.add(amount);
             balanceActual.minus(amount);
-            return noBalance ? new Amount(0) : balanceActual;
+            return noBalance ? Amount.of(0) : balanceActual;
         }
 
     }

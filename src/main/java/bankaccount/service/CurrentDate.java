@@ -3,6 +3,7 @@ package bankaccount.service;
 import bankaccount.util.CurrentDates;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class CurrentDate implements CurrentDates {
@@ -33,8 +34,6 @@ public class CurrentDate implements CurrentDates {
 
     @Override
     public String toString() {
-        return "CurrentDate{" +
-                "date=" + date +
-                '}';
+        return date.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 }
