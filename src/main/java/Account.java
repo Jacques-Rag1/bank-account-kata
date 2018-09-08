@@ -32,4 +32,7 @@ class Account {
         operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDate.getCurrentDate()));
     }
 
+    public void showOperationsHistory() {
+        operations.showAllStatements();
+    }
 }

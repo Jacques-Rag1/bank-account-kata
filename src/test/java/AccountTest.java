@@ -136,6 +136,33 @@ public class AccountTest {
 
         operationsFake.verifyCheckWithOperationAndAmountAndBalanceAndDate();
     }
+    @Test
+    public void showOperationsHistory_should_delegate_to_Operations() {
+        CurrentDateFake currentDateFake = new CurrentDateFake(DAY_OF_OPERATIONS);
+        CurrentDateFake currentDateFakePlusOne = new CurrentDateFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
+        CurrentDateFake currentDateFakeMinusOne = new CurrentDateFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
+
+        TransactionsFake transactionsFake = new TransactionsFake(
+                new ArrayList<>());
+
+        List<OperationStatement> statements = new ArrayList<>();
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, BALANCE_100, currentDateFake));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, BALANCE_150, currentDateFakePlusOne));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, BALANCE_100, currentDateFakeMinusOne));
+
+        OperationsFake operationsFake = new OperationsFake(statements);
+
+        Account account = new Account(transactionsFake, operationsFake, currentDateFake);
+
+        account.makeDeposit(AMOUNT_100);
+        account.makeDeposit(AMOUNT_50);
+        account.makeWithdrawal(AMOUNT_50);
+
+        account.showOperationsHistory();
+
+        operationsFake.verifyHistory();
+    }
+
 
 
 
@@ -177,6 +204,7 @@ public class AccountTest {
     class OperationsFake implements Operations{
         List<OperationStatement> operationsExpected;
         List<OperationStatement> operationsActual = new ArrayList<>();
+        int methodShowAllStatementsCall = 0;
 
         public OperationsFake() {
         }
@@ -200,6 +228,15 @@ public class AccountTest {
         @Override
         public void addStatement(OperationStatement operationStatement) {
             this.operationsActual.add(operationStatement);
+        }
+
+        @Override
+        public void showAllStatements() {
+            methodShowAllStatementsCall++;
+        }
+
+        public void verifyHistory() {
+            assertThat(methodShowAllStatementsCall).isEqualTo(1);
         }
     }
     class CurrentDateFake implements CurrentDate{
