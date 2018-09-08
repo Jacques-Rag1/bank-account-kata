@@ -1,3 +1,5 @@
+package bankaccount;
+
 class Account {
 
 
@@ -6,7 +8,6 @@ class Account {
     private final CurrentDate currentDate;
 
     public Account(Transactions transactions, Operations operations, CurrentDate currentDate) {
-
         this.transactions = transactions;
         this.operations = operations;
         this.currentDate = currentDate;
@@ -28,7 +29,6 @@ class Account {
         else{
             balance = new Amount(transactions.remove(amount).value);
         }
-
         operations.addStatement(new OperationStatement(operationsType, amount, balance, currentDate.getCurrentDate()));
     }
 

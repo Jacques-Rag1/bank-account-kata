@@ -1,3 +1,7 @@
+package bankaccount;
+
+import bankaccount.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -18,18 +22,29 @@ public class AccountTest {
     public static final LocalDate DAY_OF_OPERATIONS_PLUS_A_DAY = LocalDate.of(2018, 9, 8).plusDays(1);
     public static final LocalDate DAY_OF_OPERATIONS_MINUS_A_DAY = LocalDate.of(2018, 9, 8).minusDays(1);
 
+    TransactionsFake transactionsFakeGeneric;
+    OperationsFake operationsFakeGeneric;
+    CurrentDateFake currentDateFakeUseless;
+
+    @Before
+    public void initialise(){
+        transactionsFakeGeneric = new TransactionsFake(
+                new ArrayList<>());
+        transactionsFakeGeneric.noBalance = true;
+        currentDateFakeUseless = new CurrentDateFake(DAY_OF_OPERATIONS);
+        currentDateFakeUseless.methodCall = 3;
+        operationsFakeGeneric = new OperationsFake();
+    }
     @Test
     public void make_deposit_should_delegate_to_transaction(){
         final ArrayList<Amount> addAmounts = new ArrayList<>();
         addAmounts.add(AMOUNT_100);
         addAmounts.add(AMOUNT_50);
         addAmounts.add(AMOUNT_200);
-
         TransactionsFake transactionsFake = new TransactionsFake(
             addAmounts);
-        OperationsFake operationsFake = new OperationsFake();
-        Account account = new Account(transactionsFake, operationsFake, new CurrentDateFake(DAY_OF_OPERATIONS));
 
+        Account account = new Account(transactionsFake, operationsFakeGeneric, currentDateFakeUseless);
 
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_50);
@@ -48,8 +63,7 @@ public class AccountTest {
         TransactionsFake transactionsFake = new TransactionsFake(
             removeAmounts);
 
-        OperationsFake operationsFake = new OperationsFake();
-        Account account = new Account(transactionsFake, operationsFake, new CurrentDateFake(DAY_OF_OPERATIONS));
+        Account account = new Account(transactionsFake, operationsFakeGeneric, currentDateFakeUseless);
 
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_50);
@@ -60,38 +74,32 @@ public class AccountTest {
 
     @Test
     public void when_a_deposit_is_made_Account_should_insert_in_operations() {
-        TransactionsFake transactionsFake = new TransactionsFake(
-                new ArrayList<>());
-
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, new Amount(0), null));
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, new Amount(0), null));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, new Amount(0), currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, new Amount(0), currentDateFakeUseless));
 
         OperationsFake operationsFake = new OperationsFake(statements);
-        Account account = new Account(transactionsFake, operationsFake, new CurrentDateFake(DAY_OF_OPERATIONS));
+        Account account = new Account(transactionsFakeGeneric, operationsFake, currentDateFakeUseless);
 
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_50);
 
-        operationsFake.verifyCheckWithOperationAndAmount();
+        operationsFake.verifyCheck();
     }
 
     @Test
     public void when_a_withdrawal_is_made_Account_should_insert_in_operations() {
-        TransactionsFake transactionsFake = new TransactionsFake(
-                new ArrayList<>());
-
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100, new Amount(0), null));
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, new Amount(0), null));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100, new Amount(0), currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, new Amount(0), currentDateFakeUseless));
 
         OperationsFake operationsFake = new OperationsFake(statements);
-        Account account = new Account(transactionsFake, operationsFake, new CurrentDateFake(DAY_OF_OPERATIONS));
+        Account account = new Account(transactionsFakeGeneric, operationsFake, currentDateFakeUseless);
 
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_50);
 
-        operationsFake.verifyCheckWithOperationAndAmount();
+        operationsFake.verifyCheck();
     }
     @Test
     public void when_operations_are_made_Account_should_insert_in_operations_with_balance() {
@@ -99,18 +107,18 @@ public class AccountTest {
                 new ArrayList<>());
 
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, BALANCE_100, null));
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, BALANCE_150, null));
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, BALANCE_100, null));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, BALANCE_100, currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, BALANCE_150, currentDateFakeUseless));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, BALANCE_100, currentDateFakeUseless));
 
         OperationsFake operationsFake = new OperationsFake(statements);
-        Account account = new Account(transactionsFake, operationsFake, new CurrentDateFake(DAY_OF_OPERATIONS));
+        Account account = new Account(transactionsFake, operationsFake, currentDateFakeUseless);
 
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_50);
         account.makeWithdrawal(AMOUNT_50);
 
-        operationsFake.verifyCheckWithOperationAndAmountAndBalance();
+        operationsFake.verifyCheck();
     }
     @Test
     public void when_operations_are_made_Account_should_insert_in_operations_with_date() {
@@ -134,7 +142,7 @@ public class AccountTest {
         account.makeDeposit(AMOUNT_50);
         account.makeWithdrawal(AMOUNT_50);
 
-        operationsFake.verifyCheckWithOperationAndAmountAndBalanceAndDate();
+        operationsFake.verifyCheck();
     }
     @Test
     public void showOperationsHistory_should_delegate_to_Operations() {
@@ -172,6 +180,7 @@ public class AccountTest {
         List<Amount> addAmountsActual = new ArrayList<>();
         List<Amount> removeAmountsActual = new ArrayList<>();
         Amount balanceActual = new Amount(0);
+        boolean noBalance = false;
 
 
         public TransactionsFake(List<Amount> addAmounts) {
@@ -190,18 +199,18 @@ public class AccountTest {
         public Amount add(Amount amount) {
            addAmountsActual.add(amount);
            balanceActual.plus(amount);
-           return balanceActual;
+           return noBalance ? new Amount(0) : balanceActual;
         }
 
         @Override
         public Amount remove(Amount amount) {
             removeAmountsActual.add(amount);
             balanceActual.minus(amount);
-            return balanceActual;
+            return noBalance ? new Amount(0) : balanceActual;
         }
 
     }
-    class OperationsFake implements Operations{
+    class OperationsFake implements Operations {
         List<OperationStatement> operationsExpected;
         List<OperationStatement> operationsActual = new ArrayList<>();
         int methodShowAllStatementsCall = 0;
@@ -213,18 +222,13 @@ public class AccountTest {
             this.operationsExpected = operationsExpected;
         }
 
-        public void verifyCheckWithOperationAndAmount() {
-            this.operationsActual.forEach(statement -> statement.setBalance(new Amount(0)));
-            this.operationsActual.forEach(statement -> statement.setCurrentDate(null));
-            assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
+        public void verifyCheck() {
+           assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
         }
-        public void verifyCheckWithOperationAndAmountAndBalance() {
-            this.operationsActual.forEach(statement -> statement.setCurrentDate(null));
-            assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
+        public void verifyHistory() {
+            assertThat(methodShowAllStatementsCall).isEqualTo(1);
         }
-        public void verifyCheckWithOperationAndAmountAndBalanceAndDate() {
-            assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
-        }
+
         @Override
         public void addStatement(OperationStatement operationStatement) {
             this.operationsActual.add(operationStatement);
@@ -235,11 +239,8 @@ public class AccountTest {
             methodShowAllStatementsCall++;
         }
 
-        public void verifyHistory() {
-            assertThat(methodShowAllStatementsCall).isEqualTo(1);
-        }
     }
-    class CurrentDateFake implements CurrentDate{
+    class CurrentDateFake implements CurrentDate {
         LocalDate currentDate;
         int methodCall = 0;
         public CurrentDateFake(LocalDate currentDate) {

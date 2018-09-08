@@ -1,3 +1,5 @@
+package bankaccount;
+
 import java.util.Objects;
 
 class Amount {

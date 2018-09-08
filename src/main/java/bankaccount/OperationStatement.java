@@ -1,23 +1,17 @@
+package bankaccount;
+
 import java.util.Objects;
 
 public class OperationStatement {
-    private OperationsType operationName;
-    private Amount amount;
-    private Amount balance;
-    private CurrentDate currentDate;
+    private final OperationsType operationName;
+    private final Amount amount;
+    private final Amount balance;
+    private final CurrentDate currentDate;
 
     public OperationStatement(OperationsType operationName, Amount amount, Amount balance, CurrentDate currentDate) {
         this.operationName = operationName;
         this.amount = amount;
         this.balance = balance;
-        this.currentDate = currentDate;
-    }
-
-    public void setBalance(Amount balance) {
-        this.balance = balance;
-    }
-
-    public void setCurrentDate(CurrentDate currentDate) {
         this.currentDate = currentDate;
     }
 
