@@ -1,4 +1,4 @@
-package bankaccount;
+package bankaccount.util;
 
 public interface CurrentDate {
 

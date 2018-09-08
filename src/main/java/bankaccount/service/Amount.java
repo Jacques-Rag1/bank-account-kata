@@ -1,8 +1,8 @@
-package bankaccount;
+package bankaccount.service;
 
 import java.util.Objects;
 
-class Amount {
+public class Amount {
     int value;
 
     Amount(int value) {

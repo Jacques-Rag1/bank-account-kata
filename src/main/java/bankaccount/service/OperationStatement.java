@@ -1,4 +1,7 @@
-package bankaccount;
+package bankaccount.service;
+
+import bankaccount.util.CurrentDate;
+import bankaccount.util.OperationsType;
 
 import java.util.Objects;
 

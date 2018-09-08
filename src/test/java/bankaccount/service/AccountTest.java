@@ -1,6 +1,12 @@
-package bankaccount;
+package bankaccount.service;
 
-import bankaccount.*;
+import bankaccount.service.Account;
+import bankaccount.service.Amount;
+import bankaccount.service.OperationStatement;
+import bankaccount.util.CurrentDate;
+import bankaccount.util.Operations;
+import bankaccount.util.OperationsType;
+import bankaccount.util.Transactions;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -174,7 +180,7 @@ public class AccountTest {
 
 
 
-    class TransactionsFake implements Transactions{
+    class TransactionsFake implements Transactions {
 
         List<Amount> amountsExpected;
         List<Amount> addAmountsActual = new ArrayList<>();

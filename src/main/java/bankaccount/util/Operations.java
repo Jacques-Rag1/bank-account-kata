@@ -1,4 +1,6 @@
-package bankaccount;
+package bankaccount.util;
+
+import bankaccount.service.OperationStatement;
 
 public interface Operations {
 

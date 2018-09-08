@@ -1,4 +1,9 @@
-package bankaccount;
+package bankaccount.service;
+
+import bankaccount.util.CurrentDate;
+import bankaccount.util.Operations;
+import bankaccount.util.OperationsType;
+import bankaccount.util.Transactions;
 
 class Account {
 

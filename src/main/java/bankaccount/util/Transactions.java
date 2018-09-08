@@ -1,4 +1,6 @@
-package bankaccount;
+package bankaccount.util;
+
+import bankaccount.service.Amount;
 
 public interface Transactions {
 
