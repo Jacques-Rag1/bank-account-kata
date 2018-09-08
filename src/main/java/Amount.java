@@ -1,7 +1,7 @@
 import java.util.Objects;
 
 class Amount {
-    final int value;
+    int value;
 
     Amount(int value) {
         this.value = value;
@@ -26,5 +26,13 @@ class Amount {
         return "Amount{" +
                 "value=" + value +
                 '}';
+    }
+
+    public void plus(Amount amount) {
+        this.value += amount.value;
+    }
+
+    public void minus(Amount amount) {
+        this.value -= amount.value;
     }
 }

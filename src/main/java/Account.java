@@ -17,14 +17,17 @@ class Account {
     public void makeWithdrawal(Amount amount) {
         makeOperation(OperationsType.WITHDRAWAL, amount);
     }
+
     private void makeOperation(OperationsType operationsType, Amount amount){
+        Amount balance;
         if (operationsType.equals(OperationsType.DEPOSIT)){
-            transactions.add(amount);
+            balance = new Amount(transactions.add(amount).value);
         }
-        if (operationsType.equals(OperationsType.WITHDRAWAL)){
-            transactions.remove(amount);
+        else{
+            balance = new Amount(transactions.remove(amount).value);
         }
-        operations.addStatement(new OperationStatement(operationsType, amount));
+
+        operations.addStatement(new OperationStatement(operationsType, amount, balance));
     }
 
 }

@@ -1,7 +1,7 @@
 public interface Transactions {
 
 
-    void add(Amount amount);
+    Amount add(Amount amount);
 
-    void remove(Amount amount);
+    Amount remove(Amount amount);
 }

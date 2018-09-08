@@ -10,6 +10,8 @@ public class AccountTest {
     public static final Amount AMOUNT_100 = new Amount(100);
     public static final Amount AMOUNT_50 = new Amount(50);
     public static final Amount AMOUNT_200 = new Amount(200);
+    public static final Amount BALANCE_100 = new Amount(100);
+    public static final Amount BALANCE_150 = new Amount(150);
 
     @Test
     public void make_deposit_should_delegate_to_transaction(){
@@ -57,8 +59,8 @@ public class AccountTest {
             new ArrayList<Amount>());
 
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100));
-        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, new Amount(0)));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, new Amount(0)));
 
         OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFake, operationsFake);
@@ -66,7 +68,7 @@ public class AccountTest {
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_50);
 
-        operationsFake.verifyCheck();
+        operationsFake.verifyCheckWithOperationAndAmount();
     }
 
     @Test
@@ -75,8 +77,8 @@ public class AccountTest {
                 new ArrayList<Amount>());
 
         List<OperationStatement> statements = new ArrayList<>();
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100));
-        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100, new Amount(0)));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, new Amount(0)));
 
         OperationsFake operationsFake = new OperationsFake(statements);
         Account account = new Account(transactionsFake, operationsFake);
@@ -84,36 +86,63 @@ public class AccountTest {
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_50);
 
-        operationsFake.verifyCheck();
+        operationsFake.verifyCheckWithOperationAndAmount();
     }
+    @Test
+    public void when_operations_are_made_Account_should_insert_in_operations_with_balance() {
+        TransactionsFake transactionsFake = new TransactionsFake(
+                new ArrayList<Amount>());
+
+        List<OperationStatement> statements = new ArrayList<>();
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, BALANCE_100));
+        statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, BALANCE_150));
+        statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, BALANCE_100));
+
+        OperationsFake operationsFake = new OperationsFake(statements);
+        Account account = new Account(transactionsFake, operationsFake);
+
+        account.makeDeposit(AMOUNT_100);
+        account.makeDeposit(AMOUNT_50);
+        account.makeWithdrawal(AMOUNT_50);
+
+        operationsFake.verifyCheckWithOperationAndAmountAndBalance();
+    }
+
 
     class TransactionsFake implements Transactions{
 
         List<Amount> amountsExpected;
         List<Amount> addAmountsActual = new ArrayList<>();
         List<Amount> removeAmountsActual = new ArrayList<>();
+        Amount balanceActual = new Amount(0);
 
 
         public TransactionsFake(List<Amount> addAmounts) {
             this.amountsExpected = addAmounts;
         }
+
         public void verifyAdd(){
             assertThat(this.addAmountsActual).isEqualTo(this.amountsExpected);
-        }
-
-        @Override
-        public void add(Amount amount) {
-           addAmountsActual.add(amount);
-        }
-
-        @Override
-        public void remove(Amount amount) {
-            removeAmountsActual.add(amount);
         }
 
         public void verifyRemove() {
             assertThat(this.removeAmountsActual).isEqualTo(this.amountsExpected);
         }
+
+        @Override
+        public Amount add(Amount amount) {
+           addAmountsActual.add(amount);
+           balanceActual.plus(amount);
+           return balanceActual;
+        }
+
+        @Override
+        public Amount remove(Amount amount) {
+            removeAmountsActual.add(amount);
+            balanceActual.minus(amount);
+            return balanceActual;
+        }
+
     }
     class OperationsFake implements Operations{
         List<OperationStatement> operationsExpected;
@@ -126,13 +155,18 @@ public class AccountTest {
             this.operationsExpected = operationsExpected;
         }
 
-        public void verifyCheck() {
+        public void verifyCheckWithOperationAndAmount() {
+            this.operationsActual.forEach(statement -> statement.setBalance(new Amount(0)));
+            assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
+        }
+        public void verifyCheckWithOperationAndAmountAndBalance() {
             assertThat(this.operationsActual).isEqualTo(this.operationsExpected);
         }
         @Override
         public void addStatement(OperationStatement operationStatement) {
             this.operationsActual.add(operationStatement);
         }
+
 
     }
 }
