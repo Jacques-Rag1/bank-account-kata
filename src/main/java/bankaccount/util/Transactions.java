@@ -5,7 +5,7 @@ import bankaccount.service.Amount;
 public interface Transactions {
 
 
-    Amount add(Amount amount);
+    Amount addAmount(Amount amount);
 
-    Amount remove(Amount amount);
+    Amount removeAmount(Amount amount);
 }

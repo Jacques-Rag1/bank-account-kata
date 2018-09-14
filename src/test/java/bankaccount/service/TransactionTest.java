@@ -11,12 +11,12 @@ public class TransactionTest {
 
     @Test
     public void add_should_return_a_zero_amount(){
-        Amount amountAfterAdding = new Transaction(Amount.of(0)).add(Amount.of(0));
+        Amount amountAfterAdding = new Transaction(Amount.of(0)).addAmount(Amount.of(0));
         assertThat(amountAfterAdding).isEqualTo(Amount.of(0));
     }
     @Test
     public void add_should_return_an_amount(){
-        Amount amountAfterAdding = new Transaction(Amount.of(0)).add(AMOUNT_100);
+        Amount amountAfterAdding = new Transaction(Amount.of(0)).addAmount(AMOUNT_100);
         assertThat(amountAfterAdding).isEqualTo(AMOUNT_100);
     }
 
@@ -24,18 +24,18 @@ public class TransactionTest {
     public void add_should_return_the_balance_after_adding() {
         Transaction transaction = new Transaction(Amount.of(0));
         Amount balance;
-        transaction.add(AMOUNT_100);
-        balance = transaction.add(AMOUNT_50);
+        transaction.addAmount(AMOUNT_100);
+        balance = transaction.addAmount(AMOUNT_50);
         assertThat(balance).isEqualTo(Amount.of(150));
     }
     @Test
     public void remove_should_return_a_zero_amount(){
-        Amount amountAfterRemove = new Transaction(Amount.of(0)).remove(Amount.of(0));
+        Amount amountAfterRemove = new Transaction(Amount.of(0)).removeAmount(Amount.of(0));
         assertThat(amountAfterRemove).isEqualTo(Amount.of(0));
     }
     @Test
     public void remove_should_return_an_amount(){
-        Amount amountAfterRemove = new Transaction(Amount.of(200)).remove(AMOUNT_100);
+        Amount amountAfterRemove = new Transaction(Amount.of(200)).removeAmount(AMOUNT_100);
         assertThat(amountAfterRemove).isEqualTo(AMOUNT_100);
     }
 
@@ -43,8 +43,8 @@ public class TransactionTest {
     public void remove_should_return_the_balance_after_removing() {
         Transaction transaction = new Transaction(Amount.of(200));
         Amount balance;
-        transaction.remove(AMOUNT_100);
-        balance = transaction.remove(AMOUNT_50);
+        transaction.removeAmount(AMOUNT_100);
+        balance = transaction.removeAmount(AMOUNT_50);
         assertThat(balance).isEqualTo(AMOUNT_50);
     }
 

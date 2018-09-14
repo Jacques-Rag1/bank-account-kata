@@ -39,7 +39,7 @@ public class AccountTest {
         operationsFakeGeneric = new OperationsFake();
     }
     @Test
-    public void make_deposit_should_delegate_to_transaction(){
+    public void make_deposit_should_call_transactions_to_add_the_amount(){
         final ArrayList<Amount> addAmounts = new ArrayList<>();
         addAmounts.add(AMOUNT_100);
         addAmounts.add(AMOUNT_50);
@@ -57,7 +57,7 @@ public class AccountTest {
     }
 
     @Test
-    public void make_withdrawal_should_delegate_to_transaction() {
+    public void make_withdrawal_should_call_transactions_to_remove_the_amount() {
         ArrayList<Amount> removeAmounts = new ArrayList<>();
         removeAmounts.add(AMOUNT_100);
         removeAmounts.add(AMOUNT_50);
@@ -76,7 +76,7 @@ public class AccountTest {
     }
 
     @Test
-    public void when_a_deposit_is_made_Account_should_insert_in_operations() {
+    public void when_a_deposit_is_made_Account_should_deliver_a_statement_to_operations() {
         List<OperationStatement> statements = new ArrayList<>();
         statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_100, Amount.of(0), currentDateFakeUseless));
         statements.add(new OperationStatement(OperationsType.DEPOSIT, AMOUNT_50, Amount.of(0), currentDateFakeUseless));
@@ -91,7 +91,7 @@ public class AccountTest {
     }
 
     @Test
-    public void when_a_withdrawal_is_made_Account_should_insert_in_operations() {
+    public void when_a_withdrawal_is_made_Account_should_deliver_a_statement_to_operations() {
         List<OperationStatement> statements = new ArrayList<>();
         statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_100, Amount.of(0), currentDateFakeUseless));
         statements.add(new OperationStatement(OperationsType.WITHDRAWAL, AMOUNT_50, Amount.of(0), currentDateFakeUseless));
@@ -105,7 +105,7 @@ public class AccountTest {
         operationsFake.verifyCheck();
     }
     @Test
-    public void when_operations_are_made_Account_should_insert_in_operations_with_balance() {
+    public void when_operations_are_made_Account_should_deliver_a_statement_with_balance() {
         TransactionsFake transactionsFake = new TransactionsFake(
                 new ArrayList<>());
 
@@ -124,7 +124,7 @@ public class AccountTest {
         operationsFake.verifyCheck();
     }
     @Test
-    public void when_operations_are_made_Account_should_insert_in_operations_with_date() {
+    public void when_operations_are_made_Account_should_deliver_a_statement_with_date() {
         CurrentDatesFake currentDateFake = new CurrentDatesFake(DAY_OF_OPERATIONS);
         CurrentDatesFake currentDateFakePlusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
         CurrentDatesFake currentDateFakeMinusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
@@ -148,7 +148,7 @@ public class AccountTest {
         operationsFake.verifyCheck();
     }
     @Test
-    public void showOperationsHistory_should_delegate_to_Operations() {
+    public void showOperationsHistory_should_call_Operations_to_produce_a_view_of_history() {
         CurrentDatesFake currentDateFake = new CurrentDatesFake(DAY_OF_OPERATIONS);
         CurrentDatesFake currentDateFakePlusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_PLUS_A_DAY);
         CurrentDatesFake currentDateFakeMinusOne = new CurrentDatesFake(DAY_OF_OPERATIONS_MINUS_A_DAY);
@@ -199,14 +199,14 @@ public class AccountTest {
         }
 
         @Override
-        public Amount add(Amount amount) {
+        public Amount addAmount(Amount amount) {
            addAmountsActual.add(amount);
            balanceActual.plus(amount);
            return noBalance ? Amount.of(0) : balanceActual;
         }
 
         @Override
-        public Amount remove(Amount amount) {
+        public Amount removeAmount(Amount amount) {
             removeAmountsActual.add(amount);
             balanceActual.minus(amount);
             return noBalance ? Amount.of(0) : balanceActual;

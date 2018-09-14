@@ -10,13 +10,13 @@ public class Transaction implements Transactions {
     }
 
     @Override
-    public Amount add(Amount amount) {
+    public Amount addAmount(Amount amount) {
         balance.plus(amount);
         return balance;
     }
 
     @Override
-    public Amount remove(Amount amount) {
+    public Amount removeAmount(Amount amount) {
         balance.minus(amount);
         return balance;
     }
