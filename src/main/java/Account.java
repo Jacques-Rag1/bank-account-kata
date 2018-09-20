@@ -6,7 +6,14 @@ class Account {
     }
 
     public void makeDeposit(Amount amount) {
-        transaction.add(amount);
+        makeOperation(amount);
     }
 
+    public void makeWithdrawal(Amount amount) {
+        makeOperation(amount);
+    }
+
+    private void makeOperation(Amount amount) {
+        transaction.add(amount);
+    }
 }

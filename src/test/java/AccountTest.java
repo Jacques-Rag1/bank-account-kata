@@ -31,4 +31,16 @@ class AccountTest {
         verify(transaction).add(AMOUNT_100);
         verify(transaction).add(AMOUNT_200);
     }
+
+    @Test
+    public void makeWithdrawal_should_make_a_withdrawal_of_amount(){
+        transaction = mock(Transactions.class);
+        Account account = new Account(transaction);
+
+        account.makeWithdrawal(AMOUNT_100);
+        account.makeWithdrawal(AMOUNT_200);
+
+        verify(transaction).add(AMOUNT_100);
+        verify(transaction).add(AMOUNT_200);
+    }
 }
