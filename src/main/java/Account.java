@@ -2,11 +2,13 @@ import java.util.ArrayList;
 
 class Account {
     private Transactions transaction;
+    private Dates date;
     private ArrayList<OperationStatement> history;
     private Amount balance;
 
-    Account(Transactions transaction) {
+    public Account(Transactions transaction, Dates date) {
         this.transaction = transaction;
+        this.date = date;
         this.history = new ArrayList<>();
         balance = new Amount(0);
     }
@@ -21,7 +23,7 @@ class Account {
 
     private void makeOperation(Operation operation, Amount amount) {
         balance = transaction.add(operation, amount);
-        history.add(new OperationStatement(operation, amount, balance));
+        history.add(new OperationStatement(operation, amount, balance, date.getCurrentDate()));
     }
 
     public ArrayList getHistory() {

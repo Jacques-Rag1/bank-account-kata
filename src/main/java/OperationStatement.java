@@ -1,15 +1,22 @@
+import java.time.LocalDate;
 import java.util.Objects;
 
 class OperationStatement {
     private final Operation operation;
     private final Amount amount;
     private final Amount balance;
+    private final LocalDate operationDate;
 
     public OperationStatement(Operation operation, Amount amount, Amount balance) {
+        this(operation, amount, balance,LocalDate.of(2000,1,1));
+    }
+
+    public OperationStatement(Operation operation, Amount amount, Amount balance, LocalDate operationDate) {
 
         this.operation = operation;
         this.amount = amount;
         this.balance = balance;
+        this.operationDate = operationDate;
     }
 
     @Override
@@ -19,13 +26,14 @@ class OperationStatement {
         OperationStatement that = (OperationStatement) o;
         return operation == that.operation &&
             Objects.equals(amount, that.amount) &&
-            Objects.equals(balance, that.balance);
+            Objects.equals(balance, that.balance) &&
+            Objects.equals(operationDate, that.operationDate);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(operation, amount, balance);
+        return Objects.hash(operation, amount, balance, operationDate);
     }
 
     @Override
@@ -33,6 +41,8 @@ class OperationStatement {
         return "OperationStatement{" +
             "operation=" + operation +
             ", amount=" + amount +
+            ", balance=" + balance +
+            ", operationDate=" + operationDate +
             '}';
     }
 }
