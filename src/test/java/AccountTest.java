@@ -17,7 +17,7 @@ class AccountTest {
 
         account.makeDeposit(AMOUNT_0);
 
-        verify(transaction).add(AMOUNT_0);
+        verify(transaction).add(Operation.DEPOSIT,AMOUNT_0);
     }
 
     @Test
@@ -28,8 +28,8 @@ class AccountTest {
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_200);
 
-        verify(transaction).add(AMOUNT_100);
-        verify(transaction).add(AMOUNT_200);
+        verify(transaction).add(Operation.DEPOSIT,AMOUNT_100);
+        verify(transaction).add(Operation.DEPOSIT,AMOUNT_200);
     }
 
     @Test
@@ -40,7 +40,23 @@ class AccountTest {
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_200);
 
-        verify(transaction).add(AMOUNT_100);
-        verify(transaction).add(AMOUNT_200);
+        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_100);
+        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_200);
     }
+    @Test
+    public void deposit_an_withdrawal_have_to_be_send_using_keywords(){
+        transaction = mock(Transactions.class);
+        Account account = new Account(transaction);
+
+        account.makeDeposit(AMOUNT_100);
+        account.makeDeposit(AMOUNT_200);
+        account.makeWithdrawal(AMOUNT_100);
+        account.makeWithdrawal(AMOUNT_200);
+
+        verify(transaction).add(Operation.DEPOSIT,AMOUNT_100);
+        verify(transaction).add(Operation.DEPOSIT,AMOUNT_200);
+        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_100);
+        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_200);
+    }
+
 }

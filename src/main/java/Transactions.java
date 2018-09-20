@@ -1,4 +1,4 @@
 public interface Transactions {
 
-    void add(Amount amount);
+    void add(Operation operation, Amount amount);
 }
