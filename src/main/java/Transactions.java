@@ -1,3 +1,4 @@
 public interface Transactions {
-    void add(int amount);
+
+    void add(Amount amount);
 }

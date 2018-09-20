@@ -5,7 +5,8 @@ class Account {
         this.transaction = transaction;
     }
 
-    public void makeDeposit(int amount) {
+    public void makeDeposit(Amount amount) {
         transaction.add(amount);
     }
+
 }
