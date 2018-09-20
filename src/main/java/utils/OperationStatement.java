@@ -40,11 +40,13 @@ class OperationStatement {
 
     @Override
     public String toString() {
-        return "utils.OperationStatement{" +
-            "operation=" + operation +
-            ", amount=" + amount +
-            ", balance=" + balance +
-            ", operationDate=" + operationDate +
-            '}';
+        return
+            "-------------------------------------------------\n" +
+            "Statement ->\n" +
+            "operation \t: " + operation +
+            "\namount \t\t: " + amount +
+            "\nbalance \t: " + balance +
+            "\ndate \t\t: " + operationDate +
+            "\n-------------------------------------------------";
     }
 }

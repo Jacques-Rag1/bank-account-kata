@@ -5,8 +5,28 @@ import java.util.Objects;
 public class Amount {
     private final int value;
 
-    public Amount(int amount) {
+    private Amount(int amount) {
         this.value = amount;
+    }
+
+    public static Amount createAmount(int amount) {
+        if (amount < 0){
+            throw new IllegalArgumentException("amount cannot be negative");
+        }
+        return new Amount(amount);
+    }
+
+
+    public Amount plus(Amount amount) {
+        return createAmount(this.value + amount.getValue());
+    }
+
+    public Amount minus(Amount amount) {
+        return createAmount(this.value - amount.getValue());
+    }
+
+    private int getValue() {
+        return value;
     }
 
     @Override
@@ -25,20 +45,7 @@ public class Amount {
 
     @Override
     public String toString() {
-        return "utils.Amount{" +
-            "value=" + value +
-            '}';
+        return "" + value;
     }
 
-    public Amount plus(Amount amount) {
-        return new Amount(this.value + amount.getValue());
-    }
-
-    private int getValue() {
-        return value;
-    }
-
-    public Amount minus(Amount amount) {
-        return new Amount(this.value - amount.getValue());
-    }
 }

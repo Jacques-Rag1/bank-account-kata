@@ -2,7 +2,6 @@ package utils;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import utils.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,9 +12,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AccountTest {
-    public static final Amount AMOUNT_100 = new Amount(100);
-    public static final Amount AMOUNT_200 = new Amount(200);
-    public static final Amount AMOUNT_0 = new Amount(0);
+    public static final Amount AMOUNT_100 = Amount.createAmount(100);
+    public static final Amount AMOUNT_200 = Amount.createAmount(200);
+    public static final Amount AMOUNT_0 = Amount.createAmount(0);
     public static final LocalDate DATE_OF_20_9_18 = LocalDate.of(2018, 9, 20);
     public Transactions transaction;
     public Dates date;
@@ -86,10 +85,10 @@ class AccountTest {
         when(transaction.add(Operation.WITHDRAWAL, AMOUNT_100)).thenReturn(AMOUNT_0);
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_200, new Amount(0)));
-        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_100, new Amount(0)));
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, new Amount(0)));
-        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_200, new Amount(0)));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_200, Amount.createAmount(0)));
+        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_100, Amount.createAmount(0)));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.createAmount(0)));
+        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_200, Amount.createAmount(0)));
 
         account.makeDeposit(AMOUNT_200);
         account.makeWithdrawal(AMOUNT_100);
@@ -105,7 +104,7 @@ class AccountTest {
         when(date.getCurrentDate()).thenReturn(LocalDate.of(2000,1,1));
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, new Amount(100)));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.createAmount(100)));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();
@@ -118,7 +117,7 @@ class AccountTest {
         when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, new Amount(100),DATE_OF_20_9_18));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.createAmount(100),DATE_OF_20_9_18));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();

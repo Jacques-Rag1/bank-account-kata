@@ -2,7 +2,7 @@ package utils;
 
 import java.util.ArrayList;
 
-class Account {
+public class Account {
     private Transactions transaction;
     private Dates date;
     private ArrayList<OperationStatement> history;
@@ -12,7 +12,7 @@ class Account {
         this.transaction = transaction;
         this.date = date;
         this.history = new ArrayList<>();
-        balance = new Amount(0);
+        balance = Amount.createAmount(0);
     }
 
     public void makeDeposit(Amount amount) {
