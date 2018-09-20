@@ -3,10 +3,12 @@ import java.util.ArrayList;
 class Account {
     private Transactions transaction;
     private ArrayList<OperationStatement> history;
+    private Amount balance;
 
     Account(Transactions transaction) {
         this.transaction = transaction;
         this.history = new ArrayList<>();
+        balance = new Amount(0);
     }
 
     public void makeDeposit(Amount amount) {
@@ -18,8 +20,8 @@ class Account {
     }
 
     private void makeOperation(Operation operation, Amount amount) {
-        transaction.add(operation, amount);
-        history.add(new OperationStatement(operation, amount));
+        balance = transaction.add(operation, amount);
+        history.add(new OperationStatement(operation, amount, balance));
     }
 
     public ArrayList getHistory() {

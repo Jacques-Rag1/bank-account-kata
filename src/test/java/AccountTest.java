@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class AccountTest {
     public static final Amount AMOUNT_100 = new Amount(100);
@@ -72,12 +73,36 @@ class AccountTest {
         assertThat(history).isEqualTo(historyExpected);
     }
     @Test
-    public void make_an_history_of_one_deposit(){
+    public void make_an_history_of_multiple_deposits_and_withdrawals(){
         transaction = mock(Transactions.class);
         Account account = new Account(transaction);
+        when(transaction.add(Operation.DEPOSIT, AMOUNT_200)).thenReturn(AMOUNT_0);
+        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(AMOUNT_0);
+        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_200)).thenReturn(AMOUNT_0);
+        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_100)).thenReturn(AMOUNT_0);
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_200, new Amount(0)));
+        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_100, new Amount(0)));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, new Amount(0)));
+        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_200, new Amount(0)));
+
+        account.makeDeposit(AMOUNT_200);
+        account.makeWithdrawal(AMOUNT_100);
+        account.makeDeposit(AMOUNT_100);
+        account.makeWithdrawal(AMOUNT_200);
+        ArrayList history = account.getHistory();
+
+        assertThat(history).isEqualTo(historyExpected);
+    }
+    @Test
+    public void make_an_history_of_operation_with_balance(){
+        transaction = mock(Transactions.class);
+        Account account = new Account(transaction);
+        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(AMOUNT_100);
+
+        ArrayList historyExpected = new ArrayList();
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, new Amount(100)));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();
