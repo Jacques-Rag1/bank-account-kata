@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -57,6 +59,30 @@ class AccountTest {
         verify(transaction).add(Operation.DEPOSIT,AMOUNT_200);
         verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_100);
         verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_200);
+    }
+    @Test
+    public void make_an_history_of_operation(){
+        transaction = mock(Transactions.class);
+        Account account = new Account(transaction);
+
+        ArrayList historyExpected = new ArrayList();
+
+        ArrayList history = account.getHistory();
+
+        assertThat(history).isEqualTo(historyExpected);
+    }
+    @Test
+    public void make_an_history_of_one_deposit(){
+        transaction = mock(Transactions.class);
+        Account account = new Account(transaction);
+
+        ArrayList historyExpected = new ArrayList();
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100));
+
+        account.makeDeposit(AMOUNT_100);
+        ArrayList history = account.getHistory();
+
+        assertThat(history).isEqualTo(historyExpected);
     }
 
 }
