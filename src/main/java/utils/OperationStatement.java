@@ -1,3 +1,5 @@
+package utils;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -38,7 +40,7 @@ class OperationStatement {
 
     @Override
     public String toString() {
-        return "OperationStatement{" +
+        return "utils.OperationStatement{" +
             "operation=" + operation +
             ", amount=" + amount +
             ", balance=" + balance +
