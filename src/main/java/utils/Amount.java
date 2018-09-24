@@ -5,28 +5,21 @@ import java.util.Objects;
 public class Amount {
     private final int value;
 
-    private Amount(int amount) {
+    protected Amount(int amount) {
         this.value = amount;
     }
 
-    public static Amount createAmount(int amount) {
-        if (amount < 0){
-            throw new IllegalArgumentException("amount cannot be negative");
-        }
+    public static Amount of(int amount) {
         return new Amount(amount);
     }
-
+    
 
     public Amount plus(Amount amount) {
-        return createAmount(this.value + amount.getValue());
+        return of(this.value + amount.value);
     }
 
     public Amount minus(Amount amount) {
-        return createAmount(this.value - amount.getValue());
-    }
-
-    private int getValue() {
-        return value;
+        return of(this.value - amount.value);
     }
 
     @Override

@@ -12,14 +12,14 @@ public class Account {
         this.transaction = transaction;
         this.date = date;
         this.history = new ArrayList<>();
-        balance = Amount.createAmount(0);
+        balance = Amount.of(0);
     }
 
-    public void makeDeposit(Amount amount) {
+    public void makeDeposit(AmountPositive amount) {
         makeOperation(Operation.DEPOSIT, amount);
     }
 
-    public void makeWithdrawal(Amount amount) {
+    public void makeWithdrawal(AmountPositive amount) {
         makeOperation(Operation .WITHDRAWAL, amount);
     }
 

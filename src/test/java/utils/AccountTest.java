@@ -12,9 +12,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class AccountTest {
-    public static final Amount AMOUNT_100 = Amount.createAmount(100);
-    public static final Amount AMOUNT_200 = Amount.createAmount(200);
-    public static final Amount AMOUNT_0 = Amount.createAmount(0);
+    public static final AmountPositive AMOUNT_100 = AmountPositive.of(100);
+    public static final AmountPositive AMOUNT_200 = AmountPositive.of(200);
+    public static final AmountPositive AMOUNT_0 = AmountPositive.of(0);
     public static final LocalDate DATE_OF_20_9_18 = LocalDate.of(2018, 9, 20);
     public static final LocalDate DATE_OF_1_1_2000 = LocalDate.of(2000, 1, 1);
     public Transactions transaction;
@@ -80,16 +80,16 @@ class AccountTest {
     public void make_an_history_of_multiple_deposits_and_withdrawals(){
 
         when(date.getCurrentDate()).thenReturn(LocalDate.of(2000,1,1));
-        when(transaction.add(Operation.DEPOSIT, AMOUNT_200)).thenReturn(AMOUNT_0);
-        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(AMOUNT_0);
-        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_200)).thenReturn(AMOUNT_0);
-        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_100)).thenReturn(AMOUNT_0);
+        when(transaction.add(Operation.DEPOSIT, AMOUNT_200)).thenReturn(Amount.of(0));
+        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(Amount.of(0));
+        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_200)).thenReturn(Amount.of(0));
+        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_100)).thenReturn(Amount.of(0));
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_200, Amount.createAmount(0), () -> DATE_OF_1_1_2000));
-        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_100, Amount.createAmount(0), () -> DATE_OF_1_1_2000));
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.createAmount(0), () -> DATE_OF_1_1_2000));
-        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_200, Amount.createAmount(0), () -> DATE_OF_1_1_2000));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_200, Amount.of(0), () -> DATE_OF_1_1_2000));
+        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_100, Amount.of(0), () -> DATE_OF_1_1_2000));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(0), () -> DATE_OF_1_1_2000));
+        historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_200, Amount.of(0), () -> DATE_OF_1_1_2000));
 
         account.makeDeposit(AMOUNT_200);
         account.makeWithdrawal(AMOUNT_100);
@@ -101,11 +101,11 @@ class AccountTest {
     }
     @Test
     public void make_an_history_of_operation_with_balance(){
-        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(AMOUNT_100);
+        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(Amount.of(100));
         when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.createAmount(100), () -> DATE_OF_1_1_2000));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100), () -> DATE_OF_1_1_2000));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();
@@ -114,11 +114,11 @@ class AccountTest {
     }
     @Test
     public void make_an_history_of_operation_with_date(){
-       when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(AMOUNT_100);
+       when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(Amount.of(100));
         when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
 
         ArrayList historyExpected = new ArrayList();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.createAmount(100),() ->DATE_OF_20_9_18));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100),() ->DATE_OF_20_9_18));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();
