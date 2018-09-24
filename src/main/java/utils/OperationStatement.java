@@ -9,17 +9,14 @@ class OperationStatement {
     private final Amount balance;
     private final LocalDate operationDate;
 
-    public OperationStatement(Operation operation, Amount amount, Amount balance) {
-        this(operation, amount, balance,LocalDate.of(2000,1,1));
-    }
-
-    public OperationStatement(Operation operation, Amount amount, Amount balance, LocalDate operationDate) {
+    public OperationStatement(Operation operation, Amount amount, Amount balance, Dates date) {
 
         this.operation = operation;
         this.amount = amount;
         this.balance = balance;
-        this.operationDate = operationDate;
+        this.operationDate = date.getCurrentDate();
     }
+
 
     @Override
     public boolean equals(Object o) {

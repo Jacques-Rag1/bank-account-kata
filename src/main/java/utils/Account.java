@@ -25,7 +25,7 @@ public class Account {
 
     private void makeOperation(Operation operation, Amount amount) {
         balance = transaction.add(operation, amount);
-        history.add(new OperationStatement(operation, amount, balance, date.getCurrentDate()));
+        history.add(new OperationStatement(operation, amount, balance, date));
     }
 
     public ArrayList getHistory() {
