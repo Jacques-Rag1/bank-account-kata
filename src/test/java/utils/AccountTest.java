@@ -7,9 +7,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class AccountTest {
     private static final AmountPositive AMOUNT_100 = AmountPositive.of(100);
@@ -23,19 +21,20 @@ class AccountTest {
     private Account account;
 
     @BeforeEach
-    public void initAccount(){
+    public void initAccount() {
         transaction = mock(Transactions.class);
         date = mock(Dates.class);
         balance = mock(Balance.class);
         account = new Account(transaction, date);
         account.joinBalance(balance);
     }
+
     @Test
-    public void makeDeposit_should_make_a_deposit_of_zero(){
+    public void makeDeposit_should_make_a_deposit_of_zero() {
 
         account.makeDeposit(AMOUNT_0);
 
-        verify(transaction).add(Operation.DEPOSIT,AMOUNT_0);
+        verify(transaction).add(Operation.DEPOSIT, AMOUNT_0, Amount.of(0), LocalDate.of(2000, 1, 1));
     }
 
     @Test
@@ -44,34 +43,36 @@ class AccountTest {
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_200);
 
-        verify(transaction).add(Operation.DEPOSIT,AMOUNT_100);
-        verify(transaction).add(Operation.DEPOSIT,AMOUNT_200);
+        verify(transaction).add(Operation.DEPOSIT, AMOUNT_100, Amount.of(0), LocalDate.of(2000, 1, 1));
+        verify(transaction).add(Operation.DEPOSIT, AMOUNT_200, Amount.of(0), LocalDate.of(2000, 1, 1));
     }
 
     @Test
-    public void makeWithdrawal_should_make_a_withdrawal_of_amount(){
+    public void makeWithdrawal_should_make_a_withdrawal_of_amount() {
 
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_200);
 
-        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_100);
-        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_200);
+        verify(transaction).add(Operation.WITHDRAWAL, AMOUNT_100, Amount.of(0), LocalDate.of(2000, 1, 1));
+        verify(transaction).add(Operation.WITHDRAWAL, AMOUNT_200, Amount.of(0), LocalDate.of(2000, 1, 1));
     }
+
     @Test
-    public void deposit_an_withdrawal_have_to_be_send_using_keywords(){
+    public void deposit_an_withdrawal_have_to_be_send_using_keywords() {
 
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_200);
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_200);
 
-        verify(transaction).add(Operation.DEPOSIT,AMOUNT_100);
-        verify(transaction).add(Operation.DEPOSIT,AMOUNT_200);
-        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_100);
-        verify(transaction).add(Operation.WITHDRAWAL,AMOUNT_200);
+        verify(transaction).add(Operation.DEPOSIT, AMOUNT_100, Amount.of(0), LocalDate.of(2000, 1, 1));
+        verify(transaction).add(Operation.DEPOSIT, AMOUNT_200, Amount.of(0), LocalDate.of(2000, 1, 1));
+        verify(transaction).add(Operation.WITHDRAWAL, AMOUNT_100, Amount.of(0), LocalDate.of(2000, 1, 1));
+        verify(transaction).add(Operation.WITHDRAWAL, AMOUNT_200, Amount.of(0), LocalDate.of(2000, 1, 1));
     }
+
     @Test
-    public void make_an_history_of_operation(){
+    public void make_an_history_of_operation() {
 
         ArrayList historyExpected = new ArrayList();
 
@@ -79,10 +80,11 @@ class AccountTest {
 
         assertThat(history).isEqualTo(historyExpected);
     }
-    @Test
-    public void make_an_history_of_multiple_deposits_and_withdrawals(){
 
-        when(date.getCurrentDate()).thenReturn(LocalDate.of(2000,1,1));
+    @Test
+    public void make_an_history_of_multiple_deposits_and_withdrawals() {
+
+        when(date.getCurrentDate()).thenReturn(LocalDate.of(2000, 1, 1));
         when(balance.getCurrentBalance()).thenReturn(Amount.of(0));
 
 
@@ -101,8 +103,9 @@ class AccountTest {
         historyExpected.add(new OperationStatement(Operation.WITHDRAWAL, AMOUNT_200, Amount.of(0), () -> DATE_OF_1_1_2000));
         assertThat(history).isEqualTo(historyExpected);
     }
+
     @Test
-    public void make_an_history_of_operation_with_balance(){
+    public void make_an_history_of_operation_with_balance() {
 
         when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
         when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
@@ -115,33 +118,47 @@ class AccountTest {
 
         assertThat(history).isEqualTo(historyExpected);
     }
+
     @Test
-    public void make_and_history_of_operation_with_date(){
+    public void make_and_history_of_operation_with_date() {
 
         when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
         when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
 
         ArrayList<OperationStatement> historyExpected = new ArrayList<>();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100),() ->DATE_OF_20_9_18));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100), () -> DATE_OF_20_9_18));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();
 
         assertThat(history).isEqualTo(historyExpected);
     }
+
     @Test
-    public void make_and_history_of_operation(){
+    public void make_and_history_of_operation() {
 
         when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
         when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
 
         ArrayList<OperationStatement> historyExpected = new ArrayList<>();
-        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100),() ->DATE_OF_20_9_18));
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100), () -> DATE_OF_20_9_18));
 
         account.makeDeposit(AMOUNT_100);
         ArrayList history = account.getHistory();
 
         assertThat(history).isEqualTo(historyExpected);
+    }
+
+    @Test
+    public void showHistory_should_call_transactions_to_do_it() {
+
+        when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
+
+        account.makeDeposit(AMOUNT_100);
+        account.showHistory();
+
+        verify(transaction).printHistory();
     }
 
 

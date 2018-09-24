@@ -21,6 +21,6 @@ public class Main {
         account.makeWithdrawal(AmountPositive.of(1500));
 
         System.out.println("\nHistory of operations : ");
-        account.getHistory().forEach(System.out::println);
+        transaction.printHistory();
     }
 }

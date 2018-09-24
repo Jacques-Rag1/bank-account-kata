@@ -3,7 +3,7 @@ package utils;
 import java.time.LocalDate;
 import java.util.Objects;
 
-class OperationStatement {
+public class OperationStatement {
     private final Operation operation;
     private final Amount amount;
     private final Amount balance;

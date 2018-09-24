@@ -30,7 +30,7 @@ public class Account {
 
     private void makeOperation(Operation operation, Amount amount) {
 
-        transactions.add(operation, amount);
+        transactions.add(operation, amount, balance.getCurrentBalance(), date.getCurrentDate());
         history.add(
             new OperationStatement(operation, amount,
                     balance.getCurrentBalance(), date) );
@@ -38,5 +38,9 @@ public class Account {
 
     public ArrayList getHistory() {
         return history;
+    }
+
+    public void showHistory() {
+        transactions.printHistory();
     }
 }
