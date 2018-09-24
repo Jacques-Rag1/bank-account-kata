@@ -1,15 +1,16 @@
+import service.BalanceService;
 import service.DateService;
 import utils.Account;
-import utils.Amount;
 import utils.AmountPositive;
 
 public class Main {
 
     public static void main(String[] args){
-        Amount balance = Amount.of(0);
-        service.TransactionService transaction = new service.TransactionService(balance);
+        service.TransactionService transaction = new service.TransactionService();
         service.DateService date = new DateService();
+        service.BalanceService balanceService = new BalanceService();
         utils.Account account = new Account(transaction, date);
+        account.joinBalance(balanceService);
 
         account.makeDeposit(AmountPositive.of(500));
         account.makeDeposit(AmountPositive.of(200));

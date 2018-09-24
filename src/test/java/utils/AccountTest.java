@@ -19,13 +19,16 @@ class AccountTest {
     private static final LocalDate DATE_OF_1_1_2000 = LocalDate.of(2000, 1, 1);
     private Transactions transaction;
     private Dates date;
+    private Balance balance;
     private Account account;
 
     @BeforeEach
     public void initAccount(){
         transaction = mock(Transactions.class);
         date = mock(Dates.class);
+        balance = mock(Balance.class);
         account = new Account(transaction, date);
+        account.joinBalance(balance);
     }
     @Test
     public void makeDeposit_should_make_a_deposit_of_zero(){
@@ -80,10 +83,7 @@ class AccountTest {
     public void make_an_history_of_multiple_deposits_and_withdrawals(){
 
         when(date.getCurrentDate()).thenReturn(LocalDate.of(2000,1,1));
-        when(transaction.add(Operation.DEPOSIT, AMOUNT_200)).thenReturn(Amount.of(0));
-        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(Amount.of(0));
-        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_200)).thenReturn(Amount.of(0));
-        when(transaction.add(Operation.WITHDRAWAL, AMOUNT_100)).thenReturn(Amount.of(0));
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(0));
 
 
         account.makeDeposit(AMOUNT_200);
@@ -103,7 +103,8 @@ class AccountTest {
     }
     @Test
     public void make_an_history_of_operation_with_balance(){
-        when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(Amount.of(100));
+
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
         when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
 
         ArrayList<OperationStatement> historyExpected = new ArrayList<>();
@@ -116,8 +117,23 @@ class AccountTest {
     }
     @Test
     public void make_and_history_of_operation_with_date(){
-       when(transaction.add(Operation.DEPOSIT, AMOUNT_100)).thenReturn(Amount.of(100));
+
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
         when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
+
+        ArrayList<OperationStatement> historyExpected = new ArrayList<>();
+        historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100),() ->DATE_OF_20_9_18));
+
+        account.makeDeposit(AMOUNT_100);
+        ArrayList history = account.getHistory();
+
+        assertThat(history).isEqualTo(historyExpected);
+    }
+    @Test
+    public void make_and_history_of_operation(){
+
+        when(date.getCurrentDate()).thenReturn(DATE_OF_20_9_18);
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(100));
 
         ArrayList<OperationStatement> historyExpected = new ArrayList<>();
         historyExpected.add(new OperationStatement(Operation.DEPOSIT, AMOUNT_100, Amount.of(100),() ->DATE_OF_20_9_18));

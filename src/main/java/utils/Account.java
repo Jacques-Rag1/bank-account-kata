@@ -3,29 +3,37 @@ package utils;
 import java.util.ArrayList;
 
 public class Account {
-    private Transactions transaction;
+    private Transactions transactions;
     private Dates date;
     private ArrayList<OperationStatement> history;
-    private Amount balance;
+    private Balance balance;
 
-    public Account(Transactions transaction, Dates date) {
-        this.transaction = transaction;
+    public Account(Transactions transactions, Dates date) {
+        this.transactions = transactions;
         this.date = date;
         this.history = new ArrayList<>();
-        balance = Amount.of(0);
+    }
+    public void joinBalance(Balance balance){
+        this.balance = balance;
     }
 
     public void makeDeposit(AmountPositive amount) {
+        balance.addMoney(amount);
         makeOperation(Operation.DEPOSIT, amount);
+
     }
 
     public void makeWithdrawal(AmountPositive amount) {
+        balance.removeMoney(amount);
         makeOperation(Operation .WITHDRAWAL, amount);
     }
 
     private void makeOperation(Operation operation, Amount amount) {
-        balance = transaction.add(operation, amount);
-        history.add(new OperationStatement(operation, amount, balance, date) );
+
+        transactions.add(operation, amount);
+        history.add(
+            new OperationStatement(operation, amount,
+                    balance.getCurrentBalance(), date) );
     }
 
     public ArrayList getHistory() {

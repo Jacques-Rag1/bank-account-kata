@@ -5,21 +5,14 @@ import utils.Operation;
 import utils.Transactions;
 
 public class TransactionService implements Transactions {
-    private Amount currentBalance;
 
-    public TransactionService(Amount currentBalance) {
-        this.currentBalance = currentBalance;
+    public TransactionService() {
     }
 
     @Override
-    public Amount add(Operation operation, Amount amount) {
-        if (operation.equals(Operation.DEPOSIT)){
-            currentBalance = currentBalance.plus(amount);
-        }
-        if (operation.equals(Operation.WITHDRAWAL)){
-            currentBalance = currentBalance.minus(amount);
-        }
+    public void add(Operation operation, Amount amount) {
+
+
         System.out.println("--> making transaction of " + operation + " with amount " + amount);
-        return currentBalance;
     }
 }
