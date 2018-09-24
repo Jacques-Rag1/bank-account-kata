@@ -25,7 +25,7 @@ public class Account {
 
     public void makeWithdrawal(AmountPositive amount) {
         balance.removeMoney(amount);
-        makeOperation(Operation .WITHDRAWAL, amount);
+        makeOperation(Operation.WITHDRAWAL, amount);
     }
 
     private void makeOperation(Operation operation, Amount amount) {

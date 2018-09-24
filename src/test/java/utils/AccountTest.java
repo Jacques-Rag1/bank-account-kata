@@ -32,14 +32,16 @@ class AccountTest {
     @Test
     public void makeDeposit_should_make_a_deposit_of_zero() {
 
+        when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(0));
         account.makeDeposit(AMOUNT_0);
-
-        verify(transaction).add(Operation.DEPOSIT, AMOUNT_0, Amount.of(0), LocalDate.of(2000, 1, 1));
+        verify(transaction).add(Operation.DEPOSIT, AMOUNT_0, Amount.of(0), DATE_OF_1_1_2000);
     }
 
     @Test
     public void makeDeposit_should_make_a_deposit_of_Amount_object() {
-
+        when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(0));
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_200);
 
@@ -49,7 +51,8 @@ class AccountTest {
 
     @Test
     public void makeWithdrawal_should_make_a_withdrawal_of_amount() {
-
+        when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(0));
         account.makeWithdrawal(AMOUNT_100);
         account.makeWithdrawal(AMOUNT_200);
 
@@ -59,7 +62,8 @@ class AccountTest {
 
     @Test
     public void deposit_an_withdrawal_have_to_be_send_using_keywords() {
-
+        when(date.getCurrentDate()).thenReturn(DATE_OF_1_1_2000);
+        when(balance.getCurrentBalance()).thenReturn(Amount.of(0));
         account.makeDeposit(AMOUNT_100);
         account.makeDeposit(AMOUNT_200);
         account.makeWithdrawal(AMOUNT_100);
