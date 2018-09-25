@@ -1,6 +1,7 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Account {
     private Transactions transactions;
@@ -42,5 +43,9 @@ public class Account {
 
     public void showHistory() {
         transactions.printHistory();
+    }
+
+    public List<OperationStatement> retrieveHistory() {
+        return transactions.getLog();
     }
 }

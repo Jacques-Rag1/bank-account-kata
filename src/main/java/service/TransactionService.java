@@ -28,4 +28,9 @@ public class TransactionService implements Transactions {
     public void printHistory() {
         log.forEach(System.out::println);
     }
+
+    @Override
+    public List<OperationStatement> getLog() {
+        return this.log;
+    }
 }
