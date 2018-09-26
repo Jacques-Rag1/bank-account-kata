@@ -23,7 +23,7 @@ public class Account {
     }
     private void doOperation(Amount amount, OperationType operationType){
         accountBalance.modify(operationType, amount);
-        transactions.add(operationType, amount, accountBalance.getBalanceAmount());
+        transactions.add(operationType, amount, accountBalance.getBalanceState());
     }
 
     public void showHistory() {

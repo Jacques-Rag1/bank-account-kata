@@ -2,7 +2,7 @@ package core;
 
 import java.util.Objects;
 
-class Amount {
+public class Amount {
     private final int value;
 
     public Amount(int value) {
@@ -21,5 +21,22 @@ class Amount {
     public int hashCode() {
 
         return Objects.hash(value);
+    }
+
+    public Amount plus(Amount amount) {
+        return new Amount(this.value + amount.value);
+    }
+
+    public Amount minus(Amount amount) {
+        return new Amount(this.value - amount.value);
+    }
+
+    public Amount makeClone() {
+        return new Amount(this.value);
+    }
+
+    @Override
+    public String toString() {
+        return "" + value;
     }
 }
