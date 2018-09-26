@@ -9,6 +9,13 @@ public class Account {
     }
 
     public void makeDeposit(Amount amount) {
-        transactions.add(amount);
+        this.doOperation(amount, OperationType.DEPOSIT);
+    }
+
+    public void makeWithdrawal(Amount amount) {
+        this.doOperation(amount, OperationType.WITHDRAWAL);
+    }
+    private void doOperation(Amount amount, OperationType operationType){
+        transactions.add(operationType, amount);
     }
 }

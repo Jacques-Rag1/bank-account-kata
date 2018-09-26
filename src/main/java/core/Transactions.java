@@ -1,5 +1,5 @@
 package core;
 
 public interface Transactions {
-    void add(Amount amount);
+    void add(OperationType operationType, Amount amount);
 }
