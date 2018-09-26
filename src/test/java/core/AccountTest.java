@@ -8,19 +8,23 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class AccountTest {
 
-    Transactions transactions;
-    AccountLogPrinter accountLogPrinter;
-    Account account;
+    private Transactions transactions;
+    private AccountLogPrinter accountLogPrinter;
+    private AccountBalance accountBalance;
+    private Account account;
 
     @BeforeEach
     public void initAccount() {
         transactions = mock(Transactions.class);
         accountLogPrinter = mock(AccountLogPrinter.class);
-        account = new Account(transactions, accountLogPrinter);
+        accountBalance = mock(AccountBalance.class);
+        account = new Account(transactions, accountLogPrinter, accountBalance);
+        when(accountBalance.getBalanceAmount()).thenReturn(new Amount(10), new Amount(10), new Amount(10));
     }
 
     @Nested
@@ -31,7 +35,7 @@ public class AccountTest {
 
             account.makeDeposit(new Amount(100));
 
-            verify(transactions).add((OperationType) any(), eq(new Amount(100)));
+            verify(transactions).add(any(), eq(new Amount(100)), any(Amount.class));
         }
     }
 
@@ -43,7 +47,7 @@ public class AccountTest {
 
             account.makeWithdrawal(new Amount(100));
 
-            verify(transactions).add((OperationType) any(), eq(new Amount(100)));
+            verify(transactions).add(any(), eq(new Amount(100)), any(Amount.class));
         }
     }
 
@@ -53,9 +57,9 @@ public class AccountTest {
         account.makeWithdrawal(new Amount(100));
         account.makeDeposit(new Amount(50));
 
-        verify(transactions).add(OperationType.DEPOSIT, new Amount(200));
-        verify(transactions).add(OperationType.WITHDRAWAL, new Amount(100));
-        verify(transactions).add(OperationType.DEPOSIT, new Amount(50));
+        verify(transactions).add(eq(OperationType.DEPOSIT), eq(new Amount(200)), any(Amount.class));
+        verify(transactions).add(eq(OperationType.WITHDRAWAL), eq(new Amount(100)), any(Amount.class));
+        verify(transactions).add(eq(OperationType.DEPOSIT), eq(new Amount(50)), any(Amount.class));
     }
 
     @Nested
@@ -67,21 +71,50 @@ public class AccountTest {
             account.makeWithdrawal(new Amount(100));
             account.makeDeposit(new Amount(50));
             when(transactions.getLog()).thenReturn(Arrays.asList(
-                new AccountStatement(OperationType.DEPOSIT, new Amount(200)),
-                new AccountStatement(OperationType.WITHDRAWAL, new Amount(100)),
-                new AccountStatement(OperationType.DEPOSIT, new Amount(50))
+                new AccountStatement(OperationType.DEPOSIT, new Amount(200), new Amount(0)),
+                new AccountStatement(OperationType.WITHDRAWAL, new Amount(100), new Amount(0)),
+                new AccountStatement(OperationType.DEPOSIT, new Amount(50), new Amount(0))
 
                 ));
 
             account.showHistory();
 
             List<AccountStatement> listExpected = Arrays.asList(
-                new AccountStatement(OperationType.DEPOSIT, new Amount(200)),
-                new AccountStatement(OperationType.WITHDRAWAL, new Amount(100)),
-                new AccountStatement(OperationType.DEPOSIT, new Amount(50))
+                new AccountStatement(OperationType.DEPOSIT, new Amount(200), new Amount(0)),
+                new AccountStatement(OperationType.WITHDRAWAL, new Amount(100), new Amount(0)),
+                new AccountStatement(OperationType.DEPOSIT, new Amount(50), new Amount(0))
             );
             verify(accountLogPrinter).print(listExpected);
         }
+        @Test
+        public void print_all_the_operations_we_did_with_balance(){
+            account.makeDeposit(new Amount(200));
+            account.makeWithdrawal(new Amount(100));
+            account.makeDeposit(new Amount(50));
+            when(transactions.getLog()).thenReturn(Arrays.asList(
+                new AccountStatement(OperationType.DEPOSIT, new Amount(200), new Amount(200)),
+                new AccountStatement(OperationType.WITHDRAWAL, new Amount(100), new Amount(100)),
+                new AccountStatement(OperationType.DEPOSIT, new Amount(50), new Amount(150))
+
+                ));
+
+            account.showHistory();
+
+            List<AccountStatement> listExpected = Arrays.asList(
+                new AccountStatement(OperationType.DEPOSIT, new Amount(200), new Amount(200)),
+                new AccountStatement(OperationType.WITHDRAWAL, new Amount(100), new Amount(100)),
+                new AccountStatement(OperationType.DEPOSIT, new Amount(50), new Amount(150))
+            );
+            verify(accountLogPrinter).print(listExpected);
+        }
+    }
+    @Test
+    public void when_a_deposit_or_a_withdrawal_is_made_account_should_update_balance(){
+        account.makeDeposit(new Amount(200));
+        account.makeWithdrawal(new Amount(100));
+
+        verify(accountBalance).modify(OperationType.DEPOSIT, new Amount(200));
+        verify(accountBalance).modify(OperationType.WITHDRAWAL, new Amount(100));
 
     }
 

@@ -5,10 +5,12 @@ import java.util.Objects;
 public class AccountStatement {
     private final OperationType operationType;
     private final Amount amount;
+    private final Amount balance;
 
-    public AccountStatement(OperationType operationType, Amount amount) {
+    public AccountStatement(OperationType operationType, Amount amount, Amount balance) {
         this.operationType = operationType;
         this.amount = amount;
+        this.balance = balance;
     }
 
     @Override
@@ -17,13 +19,14 @@ public class AccountStatement {
         if (o == null || getClass() != o.getClass()) return false;
         AccountStatement that = (AccountStatement) o;
         return operationType == that.operationType &&
-            Objects.equals(amount, that.amount);
+            Objects.equals(amount, that.amount) &&
+            Objects.equals(balance, that.balance);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(operationType, amount);
+        return Objects.hash(operationType, amount, balance);
     }
 
     @Override
@@ -31,6 +34,7 @@ public class AccountStatement {
         return "AccountStatement{" +
             "operationType=" + operationType +
             ", amount=" + amount +
+            ", balance=" + balance +
             '}';
     }
 }
