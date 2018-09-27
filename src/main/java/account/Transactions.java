@@ -1,9 +1,9 @@
-package core;
+package account;
 
 import java.util.List;
 
 public interface Transactions {
     void add(OperationType operationType, Amount amount, Amount balance);
 
-    List<AccountStatement> getLog();
+    List<Transaction> getAll();
 }

@@ -1,15 +1,15 @@
-package core;
+package account;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class AccountStatement {
+public class Transaction {
     private final OperationType operationType;
     private final Amount amount;
     private final Amount balance;
     private final LocalDate currentDate;
 
-    public AccountStatement(OperationType operationType, Amount amount, Amount balance, LocalDate currentDate) {
+    public Transaction(OperationType operationType, Amount amount, Amount balance, LocalDate currentDate) {
         this.operationType = operationType;
         this.amount = amount;
         this.balance = balance;
@@ -20,7 +20,7 @@ public class AccountStatement {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AccountStatement that = (AccountStatement) o;
+        Transaction that = (Transaction) o;
         return operationType == that.operationType &&
             Objects.equals(amount, that.amount) &&
             Objects.equals(balance, that.balance) &&

@@ -1,20 +1,20 @@
-import core.*;
-import service.AccountBalanceService;
-import service.AccountLogPrinterService;
-import service.OperationDateService;
-import service.TransactionsService;
+import account.*;
+import api.InMemoryBalance;
+import api.ConsoleTransactionsPrinter;
+import api.RealClock;
+import api.InMemoryTransactions;
 
 public class Main {
     public static void main(String[] args){
         Amount balanceInit = new Amount(0);
-        AccountBalance accountBalance = AccountBalanceService.with(balanceInit);
+        account.Balance balance = InMemoryBalance.with(balanceInit);
 
-        OperationDate operationDate = new OperationDateService();
-        Transactions transactions = new TransactionsService(operationDate);
+        Clock clock = new RealClock();
+        Transactions transactions = new InMemoryTransactions(clock);
 
-        AccountLogPrinter accountLogPrinter = new AccountLogPrinterService();
+        TransactionsPrinter transactionsPrinter = new ConsoleTransactionsPrinter();
 
-        Account account = new Account(transactions, accountLogPrinter, accountBalance);
+        Account account = new Account(transactions, transactionsPrinter, balance);
 
         account.makeDeposit(new Amount(500));
         account.makeDeposit(new Amount(340));

@@ -1,4 +1,4 @@
-package core;
+package account;
 
 import java.util.Objects;
 
@@ -29,10 +29,6 @@ public class Amount {
 
     public Amount minus(Amount amount) {
         return new Amount(this.value - amount.value);
-    }
-
-    public Amount makeClone() {
-        return new Amount(this.value);
     }
 
     @Override
